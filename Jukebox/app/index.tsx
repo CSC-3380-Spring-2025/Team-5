@@ -1,15 +1,18 @@
-import { Text, View } from "react-native";
-
+import React from "react";
+import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 export default function Index() {
+
   return (
     <View
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "black",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>Music Hello</Text>
     </View>
   );
 }
+
