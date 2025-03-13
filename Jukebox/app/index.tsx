@@ -1,5 +1,7 @@
 import React from "react";
 import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
+import ExampleFeaturedList from "@/components/FeaturedList";
+
 export default function Index() {
 
   return (
@@ -8,10 +10,11 @@ export default function Index() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "black",
+        backgroundColor: "white",
       }}
     >
-      <Text>Music Hello</Text>
+      <ExampleFeaturedList />
+    
     </View>
   );
 }
