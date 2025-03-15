@@ -24,28 +24,28 @@ const NavigationBar = () => {
       </Link>
 
       {/* Search Icon */}
-      <Link href="/searchPage" asChild>
+      <Link href="/Nav Pages/searchPage" asChild>
         <TouchableOpacity>
           <SearchIcon width={scale(48)} height={scale(48)} />
         </TouchableOpacity>
       </Link>
 
       {/* Post Icon */}
-      <Link href="/postPage" asChild>
+      <Link href="/Nav Pages/postPage" asChild>
         <TouchableOpacity>
           <PostIcon width={scale(44)} height={scale(44)} />
         </TouchableOpacity>
       </Link>
 
       {/* Game Icon */}
-      <Link href="/gamePage" asChild>
+      <Link href="/Nav Pages/gamePage" asChild>
         <TouchableOpacity>
           <GameIcon width={scale(46)} height={scale(46)} />
         </TouchableOpacity>
       </Link>
 
       {/* Profile Icon */}
-      <Link href="/profilePage" asChild>
+      <Link href="/Nav Pages/profilePage" asChild>
         <TouchableOpacity>
           <ProfileIcon width={scale(44)} height={scale(44)} />
         </TouchableOpacity>
