@@ -1,13 +1,19 @@
 // app/search.tsx
 import React from 'react';
-import { Text, View } from 'react-native';
-
+import { View, StyleSheet } from 'react-native';
+import SpotifyArtistSearch from '../components/SpotifyArtistSearch';
 
 export default function SearchPage() {
   return (
-    <View>
-      <Text>Search Page</Text>
-     
+    <View style={styles.container}>
+      <SpotifyArtistSearch />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
