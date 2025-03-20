@@ -1,21 +1,22 @@
 import React from "react";
 import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
-import ExampleFeaturedList from "@/components/FeaturedList";
+import { Stack } from "expo-router";
 
 export default function Index() {
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "white",
-      }}
-    >
-      <ExampleFeaturedList />
-    
+    <View style={styles.container}>
+      <Text>Test</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
+  },
+});
 
