@@ -1,13 +1,21 @@
-// app/search.tsx
-import React from 'react';
-import { Text, View } from 'react-native';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import SearchBar from "../components/SearchBar";
 
-
-export default function SearchPage() {
+const SearchPage = () => {
   return (
-    <View>
-      <Text>Search Page</Text>
-     
+    <View style={styles.container}>
+      <SearchBar onSearch={() => {}} />
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#000",
+    paddingTop: 50,
+  },
+});
+
+export default SearchPage;
