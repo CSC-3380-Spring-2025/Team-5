@@ -1,10 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-/*  This component is used to display information about an album or a song.
-    Issue: The line below the info title doesn't extend the full width of the container. I think this might be an issue with the index.tsx file.
-    This can be fixed later.
-*/
+// This component is used to display information about an album or a song.
 
 interface InfoProps {
   type: 'album' | 'song';
