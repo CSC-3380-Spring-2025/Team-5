@@ -18,8 +18,8 @@ export default function RootLayout() {
           color: "white",
           fontSize: 32,
         },
-        headerTitle: "Home",
         headerTitleAlign: "center",
+        headerBackVisible: false,
       }}/>
       <NavigationBar />
     </SafeAreaView>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 import { scale } from 'react-native-size-matters';
 import { StyleSheet } from 'react-native';
 import AlbumlyButton from '@/assets/gamePage_Icons/Albumly.svg'; // Updated path
@@ -12,6 +12,7 @@ import Trophy from '@/assets/gamePage_Icons/Trophy.svg';
 export default function GamePage() {
  return (
    <View style={styles.container}>
+     <Stack.Screen options={{ title: "Games" }} />
      {/* Albumly Button with Trophy */}
      <View style={styles.buttonRow}>
        <Link href="/albumly" asChild>

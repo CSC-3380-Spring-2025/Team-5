@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 import { scale } from 'react-native-size-matters';
 import { StyleSheet } from 'react-native';
 import { Image } from 'react-native';
@@ -14,20 +14,20 @@ import Line from '@/components/HorizontalLine';
 
 export default function ProfilePage() {
   return (
-
-    <View style={styles.container}>
-
-     {/*Following / Followers*/}
+    <>
+      <Stack.Screen options={{ title: "Username" }} />
+      <View style={styles.container}>
+        {/*Following / Followers*/}
         <View style={styles.textRow}>
-        <Text style={styles.textF}>Followers</Text>
-        <Text style={styles.textF}>Following</Text>
+          <Text style={styles.textF}>Followers</Text>
+          <Text style={styles.textF}>Following</Text>
       </View>
 
-     {/* Following # / Followers # */}
-      <View style={styles.numberRow}>
-        <Text style={styles.number}>1.2m</Text>
-        <Text style={styles.number}>5</Text>
-      </View>
+      {/* Following # / Followers # */}
+        <View style={styles.numberRow}>
+          <Text style={styles.number}>1.2m</Text>
+          <Text style={styles.number}>5</Text>
+        </View>
 
       {/* Bio Text Box */}
       <View style={styles.bioContainer}>
@@ -45,149 +45,138 @@ export default function ProfilePage() {
         <Text style={styles.textTitle}>Albums</Text>
       </View>
 
-     {/* Profile Picture */}
-     <View style={styles.profilePictureContainer}>
-        <View style={styles.profilePicture}>
-        <Image
-        source={require('@/assets/PFP/pfp.jpeg')}
-        style={styles.profileImage}
-/>
+        {/* Profile Picture */}
+        <View style={styles.profilePictureContainer}>
+          <View style={styles.profilePicture}>
+            <Image
+              source={require('@/assets/PFP/pfp.jpeg')}
+              style={styles.profileImage}
+            />
+          </View>
+        </View>
+        
+        {/* Lines */}
+        <View style={styles.linecontainer}>
+          <Line />
+          <View style={styles.lines} />
+          <Line />
+          <View style={styles.lines} />
+          <Line />
+          <View style={styles.lines} />
+          <Line />
+        </View>
+
+        {/* Rectangles with Albums */}
+        <View style={styles.rectangleRow2}>
+          <View style={styles.rectangleGolden}>
+            <Image
+              source={require('@/assets/r21.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.rectangleSilver}>
+            <Image
+              source={require('@/assets/r22.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.rectangleBronze}>
+            <Image
+              source={require('@/assets/r23.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.rectangle}>
+            <Image
+              source={require('@/assets/r24.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+        </View>
+
+        {/* Rectangles with Images */}
+        <View style={styles.rectangleRow}>
+          <View style={styles.rectangleGolden}>
+            <Image
+              source={require('@/assets/Top4Songs/r1.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.rectangleSilver}>
+            <Image
+              source={require('@/assets/Top4Songs/r2.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.rectangleBronze}>
+            <Image
+              source={require('@/assets/Top4Songs/r3.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.rectangle}>
+            <Image
+              source={require('@/assets/Top4Songs/r4.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+        </View>
+
+        {/* Circles with Images */}
+        <View style={styles.circleRow}>
+          <View style={styles.circleGolden}>
+            <Image
+              source={require('@/assets/Top4Artists/c1.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.circleSilver}>
+            <Image
+              source={require('@/assets/Top4Artists/c2.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.circleBronze}>
+            <Image
+              source={require('@/assets/Top4Artists/c3.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+          <View style={styles.circle}>
+            <Image
+              source={require('@/assets/Top4Artists/c4.jpeg')}
+              style={styles.rankImage}
+            />
+          </View>
+        </View>
+
+        {/* Buttons */}
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttons}>
+            <Link href="/List" asChild>
+              <TouchableOpacity activeOpacity={0.7}>
+                <ListButton width={scale(87)} height={scale(40)} />
+              </TouchableOpacity>
+            </Link>
+            <Link href="/Songs" asChild>
+              <TouchableOpacity activeOpacity={0.7}>
+                <SongsButton width={scale(87)} height={scale(40)} />
+              </TouchableOpacity>
+            </Link>
+            <Link href="/Artists" asChild>
+              <TouchableOpacity activeOpacity={0.7}>
+                <ArtistsButton width={scale(87)} height={scale(40)} />
+              </TouchableOpacity>
+            </Link>
+            <Link href="/Album" asChild>
+              <TouchableOpacity activeOpacity={0.7}>
+                <AlbumButton width={scale(87)} height={scale(40)} />
+              </TouchableOpacity>
+            </Link>
+          </View>
         </View>
       </View>
-      
-      {/* Lines */}
-      <View style={styles.linecontainer}>
-        <Line />
-        <View style={styles.lines} />
-        <Line />
-        <View style={styles.lines} />
-        <Line />
-        <View style={styles.lines} />
-        <Line />
-      </View>
-
-
-
-{/* Rectangles with Albums */}
-<View style={styles.rectangleRow2}>
-        <View style={styles.rectangleGolden}>
-          <Image
-            source={require('@/assets/r21.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.rectangleSilver}>
-          <Image
-            source={require('@/assets/r22.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.rectangleBronze}>
-          <Image
-            source={require('@/assets/r23.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.rectangle}>
-          <Image
-            source={require('@/assets/r24.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-      </View>
-
-
- {/* Rectangles with Images */}
- <View style={styles.rectangleRow}>
-        <View style={styles.rectangleGolden}>
-          <Image
-            source={require('@/assets/Top4Songs/r1.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.rectangleSilver}>
-          <Image
-            source={require('@/assets/Top4Songs/r2.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.rectangleBronze}>
-          <Image
-            source={require('@/assets/Top4Songs/r3.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.rectangle}>
-          <Image
-            source={require('@/assets/Top4Songs/r4.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-      </View>
-
-
-
-
-
-      {/* Circles with Images */}
-      <View style={styles.circleRow}>
-        <View style={styles.circleGolden}>
-          <Image
-            source={require('@/assets/Top4Artists/c1.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.circleSilver}>
-          <Image
-            source={require('@/assets/Top4Artists/c2.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.circleBronze}>
-          <Image
-            source={require('@/assets/Top4Artists/c3.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-        <View style={styles.circle}>
-          <Image
-            source={require('@/assets/Top4Artists/c4.jpeg')} // Replace with your image path
-            style={styles.rankImage}
-          />
-        </View>
-      </View>
-
-      
-
-      {/* Buttons */}
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttons}>
-          <Link href="/List" asChild>
-            <TouchableOpacity activeOpacity={0.7}>
-              <ListButton width={scale(87)} height={scale(40)} />
-            </TouchableOpacity>
-          </Link>
-          <Link href="/Songs" asChild>
-            <TouchableOpacity activeOpacity={0.7}>
-              <SongsButton width={scale(87)} height={scale(40)} />
-            </TouchableOpacity>
-          </Link>
-          <Link href="/Artists" asChild>
-            <TouchableOpacity activeOpacity={0.7}>
-              <ArtistsButton width={scale(87)} height={scale(40)} />
-            </TouchableOpacity>
-          </Link>
-          <Link href="/Album" asChild>
-            <TouchableOpacity activeOpacity={0.7}>
-              <AlbumButton width={scale(87)} height={scale(40)} />
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </View>
-
-    </View>
-
-    
+    </>
   );
 }
 
@@ -241,7 +230,6 @@ const styles = StyleSheet.create({
     marginLeft: scale(30),
   },
   bioText: {
-
     fontSize: scale(15), // Font size 20
     color: '#FFFFFF', // White text color
     textAlign: 'center', // Center text horizontally
@@ -278,7 +266,6 @@ const styles = StyleSheet.create({
     marginHorizontal: scale(106),
   },
   rectangleRow: {
-  
     flexDirection: 'row', // Arrange rectangles horizontally
     justifyContent: 'space-between', // Add space between rectangles
     paddingHorizontal: 30, // Add padding on the sides
@@ -292,7 +279,6 @@ const styles = StyleSheet.create({
     marginTop: scale(410), // Adjust this value to position the row
     marginLeft: scale(17), // Move the entire row to the right
   },
-
   rectangle: {
     width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
     height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
@@ -334,14 +320,12 @@ const styles = StyleSheet.create({
     borderColor: '#9E7015', // Golden border color
     marginRight: scale(8), // Keep the same spacing
   },
-
   circleRow: {
     flexDirection: 'row', // Arrange rectangles horizontally
     justifyContent: 'space-between', // Add space between rectangles
     paddingHorizontal: 30, // Add padding on the sides
     marginTop: scale(32), // Adjust this value to position the row
     marginLeft: scale(10), // Move the entire row to the right
-  
   },
   circle: {
     width: scale(76) - 4, // Subtract borderWidth * 2 (2 on each side)
