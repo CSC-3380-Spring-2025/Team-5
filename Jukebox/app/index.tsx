@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import ExampleFeaturedList from "@/components/FeaturedList";
@@ -13,8 +14,6 @@ export default function Index() {
         backgroundColor: "white",
       }}
     >
-      <ExampleFeaturedList />
-    
     </View>
   );
 }

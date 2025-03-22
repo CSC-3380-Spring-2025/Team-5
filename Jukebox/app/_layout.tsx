@@ -1,14 +1,11 @@
-// app/_layout.tsx
-import React from 'react';
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import NavigationBar from '@/components/NavigationBar';
+import NavBar from './Components/NavBar';
 
 export default function RootLayout() {
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Stack />
-      <NavigationBar />
-    </SafeAreaView>
-  );
+  return 
+  <SafeAreaView style={{ flex: 1 }}>
+  <Stack />;
+  <NavBar />
+  </SafeAreaView>
 }
