@@ -1,12 +1,20 @@
 import React from "react";
 import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import { Stack } from "expo-router";
+import UserPost from "@/components/postComponent";
 
 export default function Index() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Home" }} />
-      <Text>Test</Text>
+      <ScrollView>
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+      </ScrollView>
     </View>
   );
 }
@@ -16,7 +24,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "black",
+    backgroundColor: "white",
   },
 });
 
