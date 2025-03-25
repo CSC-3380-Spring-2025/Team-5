@@ -2,10 +2,10 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 
-export default function albumlyPage() {
+export default function songPage() {
  return (
    <View>
-     <Text>Albumly Page</Text>
+     <Text>Song Page</Text>
    </View>
     );
 }

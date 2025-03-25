@@ -1,6 +1,5 @@
-import React from "react";
 import { Text, View } from "react-native";
-export default function Games() {
+export default function Profile() {
   return (
     <View
       style={{
@@ -9,7 +8,7 @@ export default function Games() {
         alignItems: "center",
       }}
     >
-      <Text>Games</Text>
+      <Text>Profile</Text>
     </View>
   );
 }
