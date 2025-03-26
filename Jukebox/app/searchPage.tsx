@@ -2,12 +2,16 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SpotifyArtistSearch from '../components/SpotifyArtistSearch';
+import { Stack } from 'expo-router';
 
 export default function SearchPage() {
   return (
-    <View style={styles.container}>
-      <SpotifyArtistSearch />
-    </View>
+    <>
+      <Stack.Screen options={{ title: "Search" }} />
+      <View style={styles.container}>
+        <SpotifyArtistSearch />
+      </View>
+    </>
   );
 }
 
