@@ -1,34 +1,31 @@
-import React from 'react';
-import { SafeAreaView, Text, StyleSheet } from 'react-native';
-import { Link } from 'expo-router';
+import React from "react";
+import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
+import Info from "@/components/info";
+import { View, Text } from "react-native";
+import { Stack } from "expo-router";
+import UserPost from "@/components/postComponent";
 
-export default function Home() {
+export default function Index() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>🎧 Welcome to Jukebox</Text>
-
-      <Link href="/search" style={styles.link}>
-        👉 Tap to Discover Weather Playlists
-      </Link>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Stack.Screen options={{ title: "Home" }} />
+      <ScrollView>
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 24,
-    fontWeight: '600',
-  },
-  link: {
-    fontSize: 18,
-    color: '#1DB954', // Spotify green
-    textDecorationLine: 'underline',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
   },
 });
