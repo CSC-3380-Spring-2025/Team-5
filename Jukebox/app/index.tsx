@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import Info from "@/components/info";
-import { View, Text } from "react-native";
 import { Stack } from "expo-router";
 import UserPost from "@/components/postComponent";
 
