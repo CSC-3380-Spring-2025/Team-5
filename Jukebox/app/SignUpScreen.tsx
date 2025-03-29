@@ -21,10 +21,10 @@ export default function SignUpScreen() {
 
   const handleSignUp = async (): Promise<void> => {
       try {
-          // Create user with email and password
+          
           const userSignUp = await createUserWithEmailAndPassword(auth, email, password);
           
-          // Create user profile in Firestore
+          
           await setDoc(doc(db, 'users', userSignUp.user.uid), {
               username,
               email,
