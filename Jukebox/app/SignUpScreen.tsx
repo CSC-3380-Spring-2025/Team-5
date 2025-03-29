@@ -6,41 +6,79 @@ import{
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    Image,
+    Alert,
 } from 'react-native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '@/config/firebase';
+import { router } from 'expo-router';
+
 
 export default function SignUpScreen() {
-    const[email, setEmail]= useState('');
-    const[password, setPassword]=useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
 
-return(
+  const handleSignUp = async (): Promise<void> => {
+      try {
+          // Create user with email and password
+          const userSignUp = await createUserWithEmailAndPassword(auth, email, password);
+          
+          // Create user profile in Firestore
+          await setDoc(doc(db, 'users', userSignUp.user.uid), {
+              username,
+              email,
+              createdAt: new Date().toISOString(),
+              userId: userSignUp.user.uid,
+          });
+
+          Alert.alert('Success', 'Account created successfully!');
+          console.log('Account created successfully!');
+          router.replace('/');
+      } catch (error: any) {
+          Alert.alert('Error', error.message);
+          console.log('Error creating account:', error.message);
+      }
+  };
+
+  return(
     <SafeAreaView style={styles.container}>
-    <View style={styles.form}> 
-    <Text style={styles.heading}>Sign Up For Jukebox!</Text>
-    <TextInput
-    style={styles.input}
-    placeholder="Enter here..."
-    placeholderTextColor="#888"
-    value={email}
-    onChangeText={setEmail}
-    />
-    <TextInput
+      <View style={styles.form}> 
+        <Text style={styles.heading}>Sign Up For Jukebox!</Text>
+
+        <TextInput
           style={styles.input}
-          placeholder="Enter here..."
+          placeholder="Username"
+          placeholderTextColor="#888"
+          value={username}
+          onChangeText={setUsername}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#888"
+          value={email}
+          onChangeText={setEmail}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
           placeholderTextColor="#888"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
           <Text style={styles.jLogo}>Jukebox</Text>
       </View>
     </SafeAreaView>
   );
-}
+} 
 
 const styles = StyleSheet.create({
   container: {
