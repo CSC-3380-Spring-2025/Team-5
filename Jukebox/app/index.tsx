@@ -1,14 +1,30 @@
-import { Text, View } from "react-native";
+import React from "react";
+import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
+import Info from "@/components/info";
+import { Stack } from "expo-router";
+import UserPost from "@/components/postComponent";
+
 export default function Index() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Home Screen</Text>
+    <View style={styles.container}>
+      <Stack.Screen options={{ title: "Home" }} />
+      <ScrollView>
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+        <UserPost />
+      </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+});
