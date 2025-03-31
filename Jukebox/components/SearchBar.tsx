@@ -4,9 +4,10 @@ import { TextInput, View, StyleSheet } from "react-native";
 interface SearchBarProps {
   placeholder?: string;
   onSearch: (query: string) => void;
+  selectedCategory: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder = "Search...", onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder = "Search...", onSearch, selectedCategory }) => {
   const [query, setQuery] = useState("");
 
   const handleChange = (text: string) => {
@@ -20,7 +21,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder = "Search...", onSear
         style={styles.input}
         value={query}
         onChangeText={handleChange}
-        placeholder={placeholder}
+        placeholder={`${placeholder} (${selectedCategory})`}
         placeholderTextColor="#888"
       />
     </View>
