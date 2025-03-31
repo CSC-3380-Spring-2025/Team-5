@@ -9,7 +9,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from "rea
     
 */
 
-interface Song {
+interface FeaturedSong {
     id: string;
     title: string;
     rating: number;
@@ -19,7 +19,7 @@ interface Song {
 const FeaturedSongs: React.FC = () => {
     const [showAll, setShowAll] = useState(false);
     
-    const songs: Song[] = [
+    const songs: FeaturedSong[] = [
         { id: '1', title: 'Song 1', rating: 4.5, albumCover: 'https://upload.wikimedia.org/wikipedia/en/3/39/The_Weeknd_-_Starboy.png' },
         { id: '2', title: 'Song 2', rating: 4.8, albumCover: 'https://upload.wikimedia.org/wikipedia/en/3/39/The_Weeknd_-_Starboy.png' },
         { id: '3', title: 'Song 3', rating: 4.2, albumCover: 'https://upload.wikimedia.org/wikipedia/en/3/39/The_Weeknd_-_Starboy.png' },
@@ -84,14 +84,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'white',
         paddingBottom: 5,
-        marginBottom: 10,
+        marginBottom: 15,
     },
     listContainer: {
         flex: 1,
     },
     songList: {
         flex: 1,
-        gap: 5,
+        gap: 20,
     },
     songRow: {
         flexDirection: 'row',

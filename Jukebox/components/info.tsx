@@ -62,14 +62,15 @@ const Info: React.FC<InfoProps> = ({ type, data }) => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        fontSize: 16,
-        margin: 20,
-        gap: 10,
+        padding: 16,
+        gap: 20,
     },
     infoText: {
         color: 'hsl(0, 0%, 70%)',
+        fontSize: 16,
     },
     infoTextBold: {
         fontWeight: 'bold',
@@ -80,6 +81,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'white',
         color: 'white',
+        paddingBottom: 5,
+        fontSize: 16,
         // fontWeight: 'bold', still deciding if I want this bold or not
     }
 });

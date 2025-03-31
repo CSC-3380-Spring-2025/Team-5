@@ -50,23 +50,33 @@ const RatingBlock: React.FC<RatingBlockProps> = ({
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.headerRow}>
-        <Text style={styles.largeRating}>{rating.toFixed(1)}</Text>
+      <View style={[styles.header, styles.row]}>
+        <Text style={styles.title}>RATINGS</Text>
         <Text style={styles.totalRatings}>{formatRatings(totalRatings)}</Text>
       </View>
-      <View style={styles.starsRow}>{renderStars()}</View>
+      <View style={styles.row}>
+        <Text style={styles.largeRating}>{rating.toFixed(1)}</Text>
+        <View style={styles.starsRow}>{renderStars()}</View>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#444',
-    marginBottom: 12,
+    padding: 16,
   },
-  headerRow: {
+  title: {
+    color: 'white',
+    fontSize: 16,
+  },
+  header: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+    paddingBottom: 5,
+    marginBottom: 5,
+  },
+  row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -78,11 +88,12 @@ const styles = StyleSheet.create({
   },
   totalRatings: {
     fontSize: 16,
-    color: 'gray',
+    color: 'hsl(0, 0%, 70%)',
   },
   starsRow: {
     flexDirection: 'row',
     marginTop: 4,
+    gap: 5,
   },
 });
 
