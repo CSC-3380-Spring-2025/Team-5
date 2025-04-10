@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-const PostPopup = ({ visible, onClose }) => {
+const PostPopup = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
   const [caption, setCaption] = useState('');
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<{title: string; artist: string} | null>(null);
 
   const handleSelectItem = () => {
     // Placeholder for Spotify API integration
     // In future, this will open a Spotify search modal
     setSelectedItem({
-      title: 'Placeholder Song Title',
+      title : 'Placeholder Song Title',
       artist: 'Placeholder Artist'
     });
   };

@@ -22,7 +22,7 @@ const favoriteAlbums = [
   { id: "3", name: "Album 3", artist: "Artist 3", image: placeholderAlbum },
 ];
 
-const ListItem = ({ title, onPress }) => (
+const ListItem = ({ title, onPress }: { title: string, onPress: () => void }) => (
   <TouchableOpacity onPress={onPress} style={{ paddingVertical: 10 }}>
     <Text style={{ fontSize: 18, fontWeight: "bold", color: "white" }}>{title}</Text>
   </TouchableOpacity>
