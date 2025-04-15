@@ -12,7 +12,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/config/firebase';
 import { router } from 'expo-router';
-
+import { UserData } from './types/user';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState<string>('');
@@ -21,16 +21,45 @@ export default function SignUpScreen() {
 
   const handleSignUp = async (): Promise<void> => {
       try {
-          
           const userSignUp = await createUserWithEmailAndPassword(auth, email, password);
           
+          const userData: UserData = {
+            username,
+            email,
+            createdAt: new Date().toISOString(),
+            userId: userSignUp.user.uid,
+            artistly: {
+              played: 0,
+              won: 0,
+            },
+            albumly: {
+              played: 0,
+              won: 0,
+            },
+            songly: {
+              played: 0,
+              won: 0,
+            },
+            ratings: {
+              artists: [],
+              albums: [],
+              songs: [],
+            },
+            userSongLists: [],
+            userAlbumLists: [],
+            userArtistLists: [],
+            following: [],
+            followers: [],
+            bio: 'Tell us about yourself!',
+            profilePicture: '',
+            posts: [],
+            likedPosts: [],
+            featuredSongs: [],
+            featuredAlbums: [],
+            featuredArtists: [],
+          };
           
-          await setDoc(doc(db, 'users', userSignUp.user.uid), {
-              username,
-              email,
-              createdAt: new Date().toISOString(),
-              userId: userSignUp.user.uid,
-          });
+          await setDoc(doc(db, 'users', userSignUp.user.uid), userData);
 
           Alert.alert('Success', 'Account created successfully!');
           console.log('Account created successfully!');
