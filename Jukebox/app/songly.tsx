@@ -1,32 +1,112 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Ionicons} from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { Audio } from 'expo-av';
+
+const songs = [
+  { title: "Blinding Lights", uri: require('../assets/Songs/blinding_lights.mp3') },
+  { title: "Revenge", uri: require('../assets/Songs/revenge.mp3') },
+  { title: "Moonlight", uri: require('../assets/Songs/moonlight.mp3') },
+  { title: "Circles", uri: require('../assets/Songs/circles.mp3') },
+  { title: "Steve's Lava Chicken", uri: require('../assets/Songs/steves_lava_chicken.mp3') },
+  { title: "Stay", uri: require('../assets/Songs/stay.mp3') },
+];
+
 
 export default function SonglyPage() {
   const [guess, setGuess] = useState('');
-  const [attempts, setAttempts] = useState([false, false, false, false, true]); // simulate progress
+  const [attempts, setAttempts] = useState<boolean[]>([]);
+  const [snippet, setSnippet] = useState(1);
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showCorrectPopup, setShowCorrectPopup] = useState(false);
+
+  const currentSong = songs[currentIndex];
+
+  const getHintDisplay = (title: string): string =>
+    title.replace(/[a-zA-Z]/g, '_').split('').join(' ');
+
+  const handlePlay = async () => {
+    if (sound) await sound.unloadAsync();
+  
+    try {
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        currentSong.uri,
+        { shouldPlay: true }
+      );
+      setSound(newSound);
+  
+      setTimeout(async () => {
+        await newSound.stopAsync();
+      }, snippet * 1000);
+    } catch (e) {
+      console.error('Audio error:', e);
+    }
+  };
 
   const handleGuessSubmit = () => {
-    // Handle logic
+    const isCorrect =
+      guess.trim().toLowerCase() === currentSong.title.toLowerCase();
+  
+    setAttempts((prev) => [...prev, isCorrect]);
+    setGuess('');
+  
+    if (isCorrect) {
+      setShowCorrectPopup(true);
+  
+      setTimeout(() => {
+        setShowCorrectPopup(false);
+        moveToNextSong();
+      }, 1500);
+    } else if (snippet >= 4) {
+      moveToNextSong();
+    } else {
+      setSnippet(snippet + 1);
+    }
   };
-
+  
   const handleSkip = () => {
-    // Move to next snippet
+    setAttempts((prev) => [...prev, false]);
+
+    if (snippet >= 4) {
+      moveToNextSong();
+    } else {
+      setSnippet(snippet + 1);
+    }
   };
 
+  const moveToNextSong = () => {
+    setGuess('');
+    setSnippet(1);
+    setAttempts([]);
+    setCurrentIndex((prev) => (prev + 1) % songs.length);
+  };
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+  {showCorrectPopup && (
+    <View style={styles.popup}>
+      <Text style={styles.popupText}>Correct! 🎉</Text>
+    </View>
+  )}
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Make Your Daily Guess</Text>
+      <Text style={styles.header}>SONGLY</Text>
 
-      <TouchableOpacity style={styles.playButton}>
-        <FontAwesome name="play" size={70} color="#000" />
+      <TouchableOpacity style={styles.playButton} onPress={handlePlay}>
+        <FontAwesome name="play" size={40} color="#111" />
       </TouchableOpacity>
 
-      <Text style={styles.timer}>10 Seconds</Text>
+      <Text style={styles.timer}>{snippet} Second{snippet > 1 ? 's' : ''}</Text>
 
       <Text style={styles.hint}>Hint</Text>
-      <Text style={styles.hintText}>_ _ _ _ _   _ _ _ _ _</Text>
+      <Text style={styles.hintText}>{getHintDisplay(currentSong.title)}</Text>
 
       <View style={styles.inputRow}>
         <TextInput
@@ -51,12 +131,21 @@ export default function SonglyPage() {
       <View style={styles.progressRow}>
         {attempts.map((result, i) => (
           <View key={i} style={styles.circle}>
-            {result === true && <Text style={styles.check}>✓</Text>}
-            {result === false && <Text style={styles.cross}>✕</Text>}
+            <Text style={result ? styles.check : styles.cross}>
+              {result ? '✓' : '✕'}
+            </Text>
           </View>
         ))}
       </View>
+
+      <View style={styles.navBar}>
+        <Ionicons name="home-outline" size={26} color="#fff" />
+        <Ionicons name="search" size={26} color="#fff" />
+        <Ionicons name="add-circle-outline" size={26} color="#fff" />
+        <Ionicons name="game-controller-outline" size={26} color="#fff" />
+        <Ionicons name="person-outline" size={26} color="#fff" />
       </View>
+    </View>
   );
 }
 
@@ -76,9 +165,9 @@ const styles = StyleSheet.create({
   },
   playButton: {
     backgroundColor: '#ff5e5e',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 250,
+    height: 250,
+    borderRadius: 400,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
@@ -97,6 +186,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     letterSpacing: 4,
     marginBottom: 20,
+    textAlign: 'center',
   },
   inputRow: {
     flexDirection: 'row',
@@ -144,7 +234,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  check: { color: '#00ff00', fontSize: 22 },
-  cross: { color: '#ff3333', fontSize: 22 },
+  check: {
+    color: '#00ff00',
+    fontSize: 22,
+  },
+  cross: {
+    color: '#ff3333',
+    fontSize: 22,
+  },
+  popup: {
+    position: 'absolute',
+    top: '40%',
+    left: '50%',
+    transform: [{ translateX: -100 }],
+    width: 200,
+    padding: 20,
+    backgroundColor: '#00cc88',
+    borderRadius: 10,
+    alignItems: 'center',
+    zIndex: 100,
+    elevation: 5,
+  },
+  popupText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  
+  navBar: {
+    position: 'absolute',
+    bottom: 0,
+    height: 60,
+    width: '100%',
+    backgroundColor: '#222',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
 });
-
