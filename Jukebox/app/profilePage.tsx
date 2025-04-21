@@ -9,10 +9,38 @@ import ArtistsButton from '@/assets/profilePage_Icons/ArtistsButton.svg';
 import ListButton from '@/assets/profilePage_Icons/ListButton.svg'; 
 import SongsButton from '@/assets/profilePage_Icons/SongsButton.svg'; 
 import Line from '@/components/HorizontalLine';
+import { useEffect, useState } from 'react';
+import ProfilePicture from '@/components/ProfilePicture';
+import {getAuth, updateProfile} from 'firebase/auth';
+
+
+
+
 
 
 
 export default function ProfilePage() {
+const [showModal, setShowModal] = useState(false);
+const [profilePicture, setProfilePicture] = useState('pfp.jpeg');
+useEffect(() => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user?.photoURL) {
+    setProfilePicture(user.photoURL);
+  }
+}, []);
+
+const imageMap: { [key: string]: any } = {
+  'pfp1.jpeg': require('@/assets/PFP/pfp1.jpeg'),
+  'pfp2.jpeg': require('@/assets/PFP/pfp2.jpeg'),
+  'pfp3.jpeg': require('@/assets/PFP/pfp3.jpeg'),
+  'pfp4.jpeg': require('@/assets/PFP/pfp4.jpeg'),
+  'pfp.jpeg': require('@/assets/PFP/pfp.jpeg'), 
+};
+
+
+
   return (
     <>
       <Stack.Screen options={{ title: "Username" }} />
@@ -46,14 +74,21 @@ export default function ProfilePage() {
       </View>
 
         {/* Profile Picture */}
-        <View style={styles.profilePictureContainer}>
+        
+       <View style={styles.profilePictureContainer}>
+        <TouchableOpacity onPress={() => setShowModal(true)}>
           <View style={styles.profilePicture}>
             <Image
-              source={require('@/assets/PFP/pfp.jpeg')}
-              style={styles.profileImage}
+                source={imageMap[profilePicture] || imageMap['pfp.jpeg']}
+                style={styles.profileImage}
             />
           </View>
-        </View>
+        </TouchableOpacity>
+     </View>
+
+
+
+
         
         {/* Lines */}
         <View style={styles.linecontainer}>
@@ -175,6 +210,25 @@ export default function ProfilePage() {
             </Link>
           </View>
         </View>
+        <ProfilePicture
+  visible={showModal}
+  onClose={() => setShowModal(false)}
+  onSave={async (filename) => {
+      setProfilePicture(filename); // update image in UI
+    
+      const auth = getAuth();
+      const user = auth.currentUser;
+    
+      if (user) {
+        await updateProfile(user, {
+          photoURL: filename, // save to Firebase
+        });
+      }
+    
+      setShowModal(false);
+    }}
+    
+/>
       </View>
     </>
   );
@@ -207,6 +261,7 @@ const styles = StyleSheet.create({
   profilePictureContainer: {
     alignItems: 'center',
     marginTop: scale(-500),
+    marginLeft: scale(-110),
   },
   profilePicture: {
     position: 'absolute',
