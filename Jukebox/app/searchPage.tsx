@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, FlatList, Pressable } from 'react-native';
 import SearchBar from '@/components/SearchBar';
+import { WeatherButton } from '@/components/WeatherButton'; // ✅ ADD THIS LINE
 
 type SearchCategory = 'Artists' | 'Songs' | 'Albums';
 
@@ -28,10 +29,19 @@ export default function SearchPage() {
     setResults(filtered);
   };
 
+  const handleWeatherPress = (weather: string, message: string) => {
+    console.log(message);
+  };
+
   const categories: SearchCategory[] = ['Artists', 'Songs', 'Albums'];
 
   return (
     <View style={styles.container}>
+      {/* ✅ Weather Display */}
+      <View style={styles.weatherContainer}>
+        <WeatherButton onPress={handleWeatherPress} />
+      </View>
+
       {/* Category Buttons */}
       <View style={styles.buttonGroup}>
         {categories.map((cat) => (
@@ -67,8 +77,13 @@ export default function SearchPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingTop: 50,
+    paddingHorizontal: 16,
     backgroundColor: '#000',
+  },
+  weatherContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
   },
   buttonGroup: {
     flexDirection: 'row',
