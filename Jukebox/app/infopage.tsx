@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'rea
 import RatingBlock from '@/components/RatingBlock';
 import NavigationBar from '@/components/NavigationBar';
 
-// Placeholder image (can be replaced with real image or ImageBackground)
+
 const artistImage = 'https://via.placeholder.com/400x200.png?text=Artist+Header';
 
 const featuredTracks = [
@@ -24,17 +24,17 @@ const InfoPage = () => {
   return (
     <View style={styles.wrapper}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {/* HEADER */}
+        {}
         <Image source={{ uri: artistImage }} style={styles.headerImage} />
         <View style={styles.headerTextContainer}>
           <Text style={styles.artistName}>The Weeknd</Text>
           <Text style={styles.artistLabel}>ARTIST</Text>
         </View>
 
-        {/* RATINGS */}
+        {}
         <RatingBlock rating={8.3} totalRatings={143000} />
 
-        {/* FEATURED TRACKS */}
+        {}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>FEATURED</Text>
           {featuredTracks.map((track, idx) => (
@@ -48,7 +48,7 @@ const InfoPage = () => {
           </TouchableOpacity>
         </View>
 
-        {/* ALBUMS */}
+        {}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>ALBUMS</Text>
           {albums.map((album, idx) => (
@@ -60,7 +60,7 @@ const InfoPage = () => {
         </View>
       </ScrollView>
 
-      {/* NAVIGATION */}
+      {}
       <NavigationBar />
     </View>
   );

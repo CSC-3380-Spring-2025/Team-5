@@ -1,13 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from "react-native";
-// import { MaterialIcons } from '@expo/vector-icons';
-
-/*
-    This component is used to display the featured song under an artist page.
-    Currently using placeholders 
-    In future will probably used vector icons for the star rating
-    
-*/
 
 interface FeaturedSong {
     id: string;

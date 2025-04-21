@@ -123,10 +123,10 @@ export default function SearchPage() {
         ))}
       </View>
 
-      {/* Search Bar */}
+      
       <SearchBar onSearch={handleSearch} selectedCategory={category} />
 
-      {/* Results */}
+    
       <Text style={styles.resultsTitle}>Results in {category}:</Text>
       {isLoading ? (
         <Text style={styles.loadingText}>Loading...</Text>

@@ -31,7 +31,6 @@ const ListItem = ({ title, onPress }: { title: string, onPress: () => void }) =>
 const ListsScreen = () => {
   return (
     <View style={{ flex: 1, padding: 20, backgroundColor: "#000" }}>
-      {/* Header */}
       <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
         <Text style={{ fontSize: 24, fontWeight: "bold", color: "white" }}>Lists</Text>
         <TouchableOpacity onPress={() => console.log("Create List Pressed")} style={{ backgroundColor: "white", padding: 10, borderRadius: 5 }}>
@@ -40,7 +39,6 @@ const ListsScreen = () => {
       </View>
 
       <ScrollView>
-        {/* Favorite Artists */}
         <ListItem title="Favorite Artists" onPress={() => console.log("Favorite Artists Pressed")} />
         <FlatList
           horizontal
@@ -54,7 +52,6 @@ const ListsScreen = () => {
           showsHorizontalScrollIndicator={false}
         />
 
-        {/* Favorite Songs */}
         <ListItem title="Favorite Songs" onPress={() => console.log("Favorite Songs Pressed")} />
         <FlatList
           horizontal
@@ -70,7 +67,6 @@ const ListsScreen = () => {
           showsHorizontalScrollIndicator={false}
         />
 
-        {/* Favorite Albums */}
         <ListItem title="Favorite Albums" onPress={() => console.log("Favorite Albums Pressed")} />
         <FlatList
           horizontal

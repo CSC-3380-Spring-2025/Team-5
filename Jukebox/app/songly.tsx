@@ -12,7 +12,6 @@ const songs = [
   { title: "Stay", uri: require('../assets/Songs/stay.mp3') },
 ];
 
-
 export default function SonglyPage() {
   const [guess, setGuess] = useState('');
   const [attempts, setAttempts] = useState<boolean[]>([]);

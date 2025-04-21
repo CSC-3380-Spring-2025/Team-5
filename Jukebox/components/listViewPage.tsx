@@ -19,15 +19,13 @@ const ITEM_SIZE = (screenWidth - itemMargin * 4) / 3;
 const ListViewPage = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#000", paddingHorizontal: itemMargin, paddingTop: 20 }}>
-      {/* Back Button */}
-      <TouchableOpacity
+\      <TouchableOpacity
         onPress={() => console.log("Back to List pressed")}
         style={{ marginBottom: 20 }}
       >
         <Text style={{ color: "white", fontSize: 18 }}>⟵ Back to List</Text>
       </TouchableOpacity>
 
-      {/* Section Title */}
       <Text style={{ fontSize: 24, fontWeight: "bold", color: "white", marginBottom: 20 }}>
         Your List
       </Text>

@@ -244,7 +244,7 @@ export default function ArtistlyPage() {
             </View>
           </View>
         </View>
-
+        
         {/* Game Status */}
         {gameStatus !== 'playing' && (
               <View style={styles.answerContainer}>
