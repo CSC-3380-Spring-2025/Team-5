@@ -1,5 +1,6 @@
 import { SpotifyAuth } from '../auth/spotifyAuth';
 
+
 // This is the data structure of an artist from the Spotify API (we don't need all of it)
 export interface SpotifyArtist {
     id: string; 
