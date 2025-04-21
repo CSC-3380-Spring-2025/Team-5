@@ -21,7 +21,7 @@ import {getAuth, updateProfile} from 'firebase/auth';
 
 export default function ProfilePage() {
 const [showModal, setShowModal] = useState(false);
-const [profilePicture, setProfilePicture] = useState('pfp.jpeg');
+const [profilePicture, setProfilePicture] = useState('defualtPFP.jpeg');
 useEffect(() => {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -36,7 +36,7 @@ const imageMap: { [key: string]: any } = {
   'pfp2.jpeg': require('@/assets/PFP/pfp2.jpeg'),
   'pfp3.jpeg': require('@/assets/PFP/pfp3.jpeg'),
   'pfp4.jpeg': require('@/assets/PFP/pfp4.jpeg'),
-  'pfp.jpeg': require('@/assets/PFP/pfp.jpeg'), 
+  'pfp.jpeg': require('@/assets/PFP/defaultPFP.jpeg'), 
 };
 
 
@@ -78,7 +78,7 @@ const imageMap: { [key: string]: any } = {
         <TouchableOpacity onPress={() => setShowModal(true)}>
           <View style={styles.profilePicture}>
             <Image
-                source={imageMap[profilePicture] || imageMap['pfp.jpeg']}
+                source={imageMap[profilePicture] || imageMap['defaultPFP.jpeg']}
                 style={styles.profileImage}
             />
           </View>
@@ -104,7 +104,7 @@ const imageMap: { [key: string]: any } = {
         <View style={styles.rectangleRow2}>
           <View style={styles.rectangleGolden}>
             <Image
-              source={require('@/assets/r21.jpeg')}
+              source={require('@/assets/r6.jpeg')}
               style={styles.rankImage}
             />
           </View>
@@ -144,7 +144,7 @@ const imageMap: { [key: string]: any } = {
           </View>
           <View style={styles.rectangleBronze}>
             <Image
-              source={require('@/assets/Top4Songs/r3.jpeg')}
+              source={require('@/assets/Top4Songs/r5.jpeg')}
               style={styles.rankImage}
             />
           </View>
@@ -178,7 +178,7 @@ const imageMap: { [key: string]: any } = {
           </View>
           <View style={styles.circle}>
             <Image
-              source={require('@/assets/Top4Artists/c4.jpeg')}
+              source={require('@/assets/Top4Artists/c5.jpeg')}
               style={styles.rankImage}
             />
           </View>
@@ -213,14 +213,14 @@ const imageMap: { [key: string]: any } = {
   visible={showModal}
   onClose={() => setShowModal(false)}
   onSave={async (filename) => {
-      setProfilePicture(filename); // update image in UI
+      setProfilePicture(filename); 
     
       const auth = getAuth();
       const user = auth.currentUser;
     
       if (user) {
         await updateProfile(user, {
-          photoURL: filename, // save to Firebase
+          photoURL: filename, 
         });
       }
     

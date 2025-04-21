@@ -35,21 +35,21 @@ const albums: Album[] = [
   },
   {
     id: 5,
-    name: "The Blueprint",
-    artist: "JAY-Z",
-    imageUrl: "https://i.scdn.co/image/ab67616d0000b27398d38d8b36bae76de54e15a3"
+    name: "Graduation",
+    artist: "Kanye",
+    imageUrl: "https://i.scdn.co/image/ab67616d0000b273675561f3defd1d5a551936a8"
   },
   {
     id: 6,
-    name: "Back in Black",
-    artist: "AC/DC",
-    imageUrl: "https://i.scdn.co/image/ab67616d0000b273fd967a32c6cabd2981346fc7"
+    name: "Currents",
+    artist: "Tame Impala",
+    imageUrl: "https://i.scdn.co/image/ab67616d0000b2739e1cfc756886ac782e363d79"
   },
   {
     id: 7,
-    name: "The Joshua Tree",
-    artist: "U2",
-    imageUrl: "https://i.scdn.co/image/ab67616d00001e02f8996a3f97e80d9d700635c3"
+    name: "Take Care",
+    artist: "Drake",
+    imageUrl: "https://i.scdn.co/image/ab67616d0000b273ac0c2daf1867b0d86cca74be"
   },
   {
     id: 8,
