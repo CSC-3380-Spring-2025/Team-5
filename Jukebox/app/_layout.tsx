@@ -18,8 +18,11 @@ export default function RootLayout() {
   const hiddenRoutes = ['/SignIn', '/LoginPage', '/SignUpScreen'];
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-      <StatusBar style="light" translucent={true} /> {}
+    <SafeAreaView 
+      style={{ flex: 1 }} 
+      edges={hiddenRoutes.includes(pathname) ? [] : ['bottom']}
+    >
+      <StatusBar style="light" translucent={true} />
       <Stack screenOptions={{
         headerStyle: {
           backgroundColor: "black", 

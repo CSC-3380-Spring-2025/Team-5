@@ -11,7 +11,7 @@ import{
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/config/firebase';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { UserData } from './types/user';
 
 export default function SignUpScreen() {
@@ -72,6 +72,7 @@ export default function SignUpScreen() {
 
   return(
     <SafeAreaView style={styles.container}>
+      <Stack.Screen options={{ title: "" }} />
       <View style={styles.form}> 
         <Text style={styles.heading}>Sign Up For Jukebox!</Text>
 

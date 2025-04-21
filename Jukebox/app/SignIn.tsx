@@ -1,10 +1,12 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 
 export default function SignIn() {
   return (
+    
     <View style={styles.container}>
+      <Stack.Screen options={{ title: "Jukebox" }} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
           style={styles.signUpButton}

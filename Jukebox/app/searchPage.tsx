@@ -5,7 +5,7 @@ import { WeatherButton } from '@/components/WeatherButton';
 import { SpotifyService, SpotifyArtist } from '@/services/SpotifyArtistService';
 import { SpotifySongService, SpotifySong } from '@/services/SpotifySongService';
 import { SpotifyAlbumService, SpotifyAlbum } from '@/services/SpotifyAlbumService';
-
+import { Stack } from 'expo-router';
 type SearchCategory = 'Artists' | 'Songs' | 'Albums';
 
 export default function SearchPage() {
@@ -105,6 +105,7 @@ export default function SearchPage() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ title: "Search" }} />
       {/* ✅ Weather Display */}
       <View style={styles.weatherContainer}>
         <WeatherButton onPress={handleWeatherPress} />

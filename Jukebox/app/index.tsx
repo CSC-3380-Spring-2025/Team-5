@@ -8,14 +8,14 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Home" }} />
-      <ScrollView>
-        <UserPost />
-        <UserPost />
-        <UserPost />
-        <UserPost />
-        <UserPost />
-        <UserPost />
-      </ScrollView>
+        <ScrollView>
+          <UserPost />
+          <UserPost />
+          <UserPost />
+          <UserPost />
+          <UserPost />
+          <UserPost />
+        </ScrollView>
     </View>
   );
 }
@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "black",
   },
 });
