@@ -4,8 +4,6 @@ import {
   Text,
   ActivityIndicator,
   StyleSheet,
-  View,
-  Alert,
 } from 'react-native';
 import { getLocation, getCityFromCoords } from '@/services/locationService';
 import { getCurrentWeather } from '@/services/weatherService';

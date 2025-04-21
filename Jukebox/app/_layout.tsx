@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationBar from '@/components/NavigationBar';
 import { StatusBar } from 'expo-status-bar';
-import { Redirect } from 'expo-router';
 import { useRouter } from 'expo-router';
 
 export default function RootLayout() {
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
    
     router.replace('/SignIn');
   }, []);
+
+  // List of routes where navigation bar should be hidden
+  const hiddenRoutes = ['/SignIn', '/LoginPage', '/SignUpScreen'];
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
@@ -29,7 +32,7 @@ export default function RootLayout() {
         headerTitleAlign: "center",
         headerBackVisible: false,
       }}/>
-      <NavigationBar />
+      {!hiddenRoutes.includes(pathname) && <NavigationBar />}
     </SafeAreaView>
   );
 }

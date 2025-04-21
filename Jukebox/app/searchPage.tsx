@@ -1,38 +1,116 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, FlatList, Pressable } from 'react-native';
+import { View, StyleSheet, Text, FlatList, Pressable, Image } from 'react-native';
 import SearchBar from '@/components/SearchBar';
+import { WeatherButton } from '@/components/WeatherButton';
+import { SpotifyService, SpotifyArtist } from '@/services/SpotifyArtistService';
+import { SpotifySongService, SpotifySong } from '@/services/SpotifySongService';
+import { SpotifyAlbumService, SpotifyAlbum } from '@/services/SpotifyAlbumService';
 
 type SearchCategory = 'Artists' | 'Songs' | 'Albums';
 
 export default function SearchPage() {
   const [category, setCategory] = useState<SearchCategory>('Artists');
-  const [results, setResults] = useState<string[]>([]);
+  const [results, setResults] = useState<(SpotifyArtist | SpotifySong | SpotifyAlbum)[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const spotifyArtistService = SpotifyService.getInstance();
+  const spotifySongService = SpotifySongService.getInstance();
+  const spotifyAlbumService = SpotifyAlbumService.getInstance();
 
-  const fakeData = {
-    Artists: ['Taylor Swift', 'Drake', 'Kendrick Lamar'],
-    Songs: ['Blinding Lights', 'Bad Habits', 'Peaches'],
-    Albums: ['1989', 'Scorpion', 'DAMN.'],
+  const handleSearch = async (query: string) => {
+    if (category === 'Artists') {
+      setIsLoading(true);
+      try {
+        const artistResults = await spotifyArtistService.searchArtists(query);
+        setResults(artistResults);
+      } catch (error) {
+        console.error('Error searching artists:', error);
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    } else if (category === 'Songs') {
+      setIsLoading(true);
+      try {
+        const songResults = await spotifySongService.searchSongs(query);
+        setResults(songResults);
+      } catch (error) {
+        console.error('Error searching songs:', error);
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    } else if (category === 'Albums') {
+      setIsLoading(true);
+      try {
+        const albumResults = await spotifyAlbumService.searchAlbums(query);
+        setResults(albumResults);
+      } catch (error) {
+        console.error('Error searching albums:', error);
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
-  const handleSearch = (query: string) => {
-    const categoryData = fakeData[category];
-    if (!categoryData) {
-      setResults([]);
-      return;
-    }
+  const handleWeatherPress = (weather: string, message: string) => {
+    console.log(message);
+  };
 
-    const filtered = categoryData.filter((item) =>
-      item.toLowerCase().includes(query.toLowerCase())
-    );
-
-    setResults(filtered);
+  const handleItemPress = (item: SpotifyArtist | SpotifySong | SpotifyAlbum) => {
+    console.log('Item pressed:', item.name);
   };
 
   const categories: SearchCategory[] = ['Artists', 'Songs', 'Albums'];
 
+  const renderItem = ({ item }: { item: SpotifyArtist | SpotifySong | SpotifyAlbum }) => {
+    let imageUrl = null;
+    
+    if ('images' in item && item.images[0]) {
+      // For artists and albums
+      imageUrl = item.images[0].url;
+    } else if ('album' in item && item.album.images[0]) {
+      // For songs
+      imageUrl = item.album.images[0].url;
+    }
+
+    return (
+      <Pressable 
+        onPress={() => handleItemPress(item)}
+        style={({ pressed }) => [
+          styles.resultItem,
+          pressed && styles.resultItemPressed
+        ]}
+      >
+        {imageUrl && (
+          <Image 
+            source={{ uri: imageUrl }} 
+            style={[
+              styles.albumImage,
+              (category === 'Albums' || category === 'Songs') && styles.squareImage
+            ]}
+          />
+        )}
+        <View style={styles.spotifyItemInfo}>
+          <Text style={styles.spotifyItemName}>{item.name}</Text>
+          {'artists' in item && (
+            <Text style={styles.spotifyItemDetails}>
+              {item.artists.map(a => a.name).join(', ')}
+            </Text>
+          )}
+        </View>
+      </Pressable>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      e
+      {/* ✅ Weather Display */}
+      <View style={styles.weatherContainer}>
+        <WeatherButton onPress={handleWeatherPress} />
+      </View>
+
+      {/* Category Buttons */}
       <View style={styles.buttonGroup}>
         {categories.map((cat) => (
           <Pressable
@@ -50,16 +128,18 @@ export default function SearchPage() {
 
     
       <Text style={styles.resultsTitle}>Results in {category}:</Text>
-      <FlatList
-        data={results}
-        keyExtractor={(item, index) => `${item}-${index}`}
-        renderItem={({ item }) => (
-          <Text style={styles.resultItem}>{item}</Text>
-        )}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>No results found.</Text>
-        }
-      />
+      {isLoading ? (
+        <Text style={styles.loadingText}>Loading...</Text>
+      ) : (
+        <FlatList
+          data={results}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No results found.</Text>
+          }
+        />
+      )}
     </View>
   );
 }
@@ -67,8 +147,13 @@ export default function SearchPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingTop: 50,
+    paddingHorizontal: 16,
     backgroundColor: '#000',
+  },
+  weatherContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
   },
   buttonGroup: {
     flexDirection: 'row',
@@ -94,13 +179,46 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   resultItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  albumImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  spotifyItemInfo: {
+    flex: 1,
+  },
+  spotifyItemName: {
+    color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  spotifyItemDetails: {
     color: '#ccc',
-    paddingVertical: 6,
+    fontSize: 14,
+  },
+  loadingText: {
+    color: '#fff',
+    textAlign: 'center',
+    marginTop: 20,
   },
   emptyText: {
     color: '#555',
     fontStyle: 'italic',
     marginTop: 20,
+    textAlign: 'center',
+  },
+  resultItemPressed: {
+    backgroundColor: '#333',
+    opacity: 0.8,
+  },
+  squareImage: {
+    borderRadius: 8,
   },
 });
