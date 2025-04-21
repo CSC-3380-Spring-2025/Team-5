@@ -3,7 +3,6 @@ import { Stack } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationBar from '@/components/NavigationBar';
 import { StatusBar } from 'expo-status-bar';
-import { Redirect } from 'expo-router';
 import { useRouter } from 'expo-router';
 
 export default function RootLayout() {
