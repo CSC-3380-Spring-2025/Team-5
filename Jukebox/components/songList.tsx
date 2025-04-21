@@ -1,10 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-/*
-    This component is used to display a list of songs under an album page.
-    Currently using placeholders for the song list.
-*/
 
 interface AlbumSong {
     id: string;

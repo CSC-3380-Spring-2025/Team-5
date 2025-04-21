@@ -3,9 +3,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 interface RatingBlockProps {
-  rating: number; // e.g., 8.3
-  totalRatings: number; // e.g., 143000
-  maxStars?: number; // default 10 for this style
+  rating: number; 
+  totalRatings: number; 
+  maxStars?: number; 
   starSize?: number;
 }
 

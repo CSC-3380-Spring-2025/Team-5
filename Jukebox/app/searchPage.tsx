@@ -32,7 +32,7 @@ export default function SearchPage() {
 
   return (
     <View style={styles.container}>
-      {/* Category Buttons */}
+      e
       <View style={styles.buttonGroup}>
         {categories.map((cat) => (
           <Pressable
@@ -45,10 +45,10 @@ export default function SearchPage() {
         ))}
       </View>
 
-      {/* Search Bar */}
+      
       <SearchBar onSearch={handleSearch} selectedCategory={category} />
 
-      {/* Results */}
+    
       <Text style={styles.resultsTitle}>Results in {category}:</Text>
       <FlatList
         data={results}

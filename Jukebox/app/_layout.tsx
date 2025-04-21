@@ -10,13 +10,13 @@ export default function RootLayout() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to sign-in screen when app starts
+   
     router.replace('/SignIn');
   }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-      <StatusBar style="light" translucent={true} /> {/*Fills top background for android phones*/}
+      <StatusBar style="light" translucent={true} /> {}
       <Stack screenOptions={{
         headerStyle: {
           backgroundColor: "black", 

@@ -17,19 +17,19 @@ export default function ProfilePage() {
     <>
       <Stack.Screen options={{ title: "Username" }} />
       <View style={styles.container}>
-        {/*Following / Followers*/}
+        {}
         <View style={styles.textRow}>
           <Text style={styles.textF}>Followers</Text>
           <Text style={styles.textF}>Following</Text>
       </View>
 
-      {/* Following # / Followers # */}
+      {}
         <View style={styles.numberRow}>
           <Text style={styles.number}>1.2m</Text>
           <Text style={styles.number}>5</Text>
         </View>
 
-      {/* Bio Text Box */}
+      {}
       <View style={styles.bioContainer}>
         <Text style={styles.bioText}>
           This is a sample bio. It is centered and limited to 100 characters.
@@ -38,14 +38,14 @@ export default function ProfilePage() {
 
 
 
-      {/*Rank Category*/}
+      {}
       <View style={styles.textColumn}>
         <Text style={styles.textTitle}>Songs</Text>
         <Text style={styles.textTitle}>Artists</Text>
         <Text style={styles.textTitle}>Albums</Text>
       </View>
 
-        {/* Profile Picture */}
+        {}
         <View style={styles.profilePictureContainer}>
           <View style={styles.profilePicture}>
             <Image
@@ -55,7 +55,7 @@ export default function ProfilePage() {
           </View>
         </View>
         
-        {/* Lines */}
+        {}
         <View style={styles.linecontainer}>
           <Line />
           <View style={styles.lines} />
@@ -66,7 +66,7 @@ export default function ProfilePage() {
           <Line />
         </View>
 
-        {/* Rectangles with Albums */}
+        {}
         <View style={styles.rectangleRow2}>
           <View style={styles.rectangleGolden}>
             <Image
@@ -94,7 +94,7 @@ export default function ProfilePage() {
           </View>
         </View>
 
-        {/* Rectangles with Images */}
+        {}
         <View style={styles.rectangleRow}>
           <View style={styles.rectangleGolden}>
             <Image
@@ -122,7 +122,7 @@ export default function ProfilePage() {
           </View>
         </View>
 
-        {/* Circles with Images */}
+        
         <View style={styles.circleRow}>
           <View style={styles.circleGolden}>
             <Image
@@ -150,7 +150,7 @@ export default function ProfilePage() {
           </View>
         </View>
 
-        {/* Buttons */}
+     
         <View style={styles.buttonContainer}>
           <View style={styles.buttons}>
             <Link href="/List" asChild>
@@ -186,23 +186,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#808080',
   },
   buttonContainer: {
-    position: 'absolute', // Position the buttons absolutely
-    bottom: 0, // Stick to the bottom
-    width: '100%', // Full width
+    position: 'absolute', 
+    bottom: 0, 
+    width: '100%', 
   },
   buttons: {
-    flexDirection: 'row', // Arrange buttons in a row
-    justifyContent: 'space-around', // Add equal spacing around buttons
-    alignItems: 'center', // Center buttons vertically
-    paddingBottom: scale(40), // Add padding at the bottom
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    alignItems: 'center', 
+    paddingBottom: scale(40), 
   },
   linecontainer: {
-    position: 'absolute', // Position the lines absolutely
-    top: scale(210), // Adjust this value to move lines up or down
-    width: '100%', // Ensure the container spans the full width
+    position: 'absolute', 
+    top: scale(210), 
+    width: '100%', 
   },
   lines: {
-    height: scale(105), // Space between lines
+    height: scale(105), 
   },
   profilePictureContainer: {
     alignItems: 'center',
@@ -224,143 +224,143 @@ const styles = StyleSheet.create({
   },
   bioContainer: {
     position: 'absolute',
-    alignItems: 'center', // Center horizontally
-    marginTop: scale(160), // Adjust spacing as needed
-    paddingHorizontal: scale(20), // Add padding to prevent text from touching edges
+    alignItems: 'center', 
+    marginTop: scale(160), 
+    paddingHorizontal: scale(20), 
     marginLeft: scale(30),
   },
   bioText: {
-    fontSize: scale(15), // Font size 20
-    color: '#FFFFFF', // White text color
-    textAlign: 'center', // Center text horizontally
-    maxWidth: scale(300), // Limit width to prevent overflow
+    fontSize: scale(15), 
+    color: '#FFFFFF', 
+    textAlign: 'center', 
+    maxWidth: scale(300), 
   },
   textRow: {
-    flexDirection: 'row', // Arrange text elements horizontally
-    justifyContent: 'center', // Add space between text elements
-    width: scale(350), // DONT CHANGE
+    flexDirection: 'row', 
+    justifyContent: 'center', 
+    width: scale(350), 
   },
   textF: {
     fontSize: 20,
     color: '#FFFFFF',
-    marginHorizontal: scale(80), // Add horizontal spacing
-    marginTop: scale(115), // DONT CHANGE
+    marginHorizontal: scale(80), 
+    marginTop: scale(115), 
   },
   textColumn: {
     marginLeft: scale(0),
-    marginTop: scale(55), // Add vertical spacing
+    marginTop: scale(55), 
   },
   textTitle: {
     fontSize: 15,
     color: '#FFFFFF',
-    height: scale(107), // DONT CHANGE
+    height: scale(107), 
   },
   numberRow: {
-    flexDirection: 'row', // Arrange numbers horizontally
-    marginLeft: scale(-66), // Move the entire row to the left
+    flexDirection: 'row', 
+    marginLeft: scale(-66), 
   },
   number: {
     fontSize: 20,
     color: '#FFFFFF',
-    marginTop: scale(0), // Adjust vertical spacing if needed
+    marginTop: scale(0), 
     marginHorizontal: scale(106),
   },
   rectangleRow: {
-    flexDirection: 'row', // Arrange rectangles horizontally
-    justifyContent: 'space-between', // Add space between rectangles
-    paddingHorizontal: 30, // Add padding on the sides
-    marginTop: scale(-295), // Adjust this value to position the row
-    marginLeft: scale(17), // Move the entire row to the right
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: 30, 
+    marginTop: scale(-295), 
+    marginLeft: scale(17), 
   },
   rectangleRow2: {
-    flexDirection: 'row', // Arrange rectangles horizontally
-    justifyContent: 'space-between', // Add space between rectangles
-    paddingHorizontal: 30, // Add padding on the sides
-    marginTop: scale(410), // Adjust this value to position the row
-    marginLeft: scale(17), // Move the entire row to the right
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: 30, 
+    marginTop: scale(410), 
+    marginLeft: scale(17), 
   },
   rectangle: {
-    width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
+    width: scale(70) - 4, 
+    height: scale(85) - 4, 
     borderRadius: 5,
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'transparent', // Golden border color
-    marginRight: scale(8), // Keep the same spacing
+    borderWidth: 3, 
+    borderColor: 'transparent', 
+    marginRight: scale(8),
   },
   rectangleGolden: {
-    width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
+    width: scale(70) - 4, 
+    height: scale(85) - 4, 
     borderRadius: 5,
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'gold', // Golden border color
-    marginRight: scale(8), // Keep the same spacing
+    borderWidth: 3, 
+    borderColor: 'gold', 
+    marginRight: scale(8), 
   },
   rankImage: {
-    width: '100%', // Fill the rectangle width
-    height: '100%', // Fill the rectangle height
-    resizeMode: 'cover', // Ensure the image covers the rectangle without distortion
+    width: '100%',
+    height: '100%', 
+    resizeMode: 'cover', 
   },
   rectangleSilver: {
-    width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
+    width: scale(70) - 4, 
+    height: scale(85) - 4, 
     borderRadius: 5,
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'silver', // Golden border color
-    marginRight: scale(8), // Keep the same spacing
+    borderWidth: 3, 
+    borderColor: 'silver', 
+    marginRight: scale(8), 
   },
   rectangleBronze: {
-    width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
+    width: scale(70) - 4, 
+    height: scale(85) - 4, 
     borderRadius: 5,
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: '#9E7015', // Golden border color
-    marginRight: scale(8), // Keep the same spacing
+    borderWidth: 3, 
+    borderColor: '#9E7015',
+    marginRight: scale(8), 
   },
   circleRow: {
-    flexDirection: 'row', // Arrange rectangles horizontally
-    justifyContent: 'space-between', // Add space between rectangles
-    paddingHorizontal: 30, // Add padding on the sides
-    marginTop: scale(32), // Adjust this value to position the row
-    marginLeft: scale(10), // Move the entire row to the right
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: 30, 
+    marginTop: scale(32), 
+    marginLeft: scale(10), 
   },
   circle: {
-    width: scale(76) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(76) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: scale(76 / 2), // Half of width/height to make it a circle
+    width: scale(76) - 4, 
+    height: scale(76) - 4, 
+    borderRadius: scale(76 / 2), 
     overflow: 'hidden',
-    borderWidth: 0, // Add a border
-    borderColor: 'transparent', // Golden border color
-    marginRight: scale(3), // Keep the same spacing
+    borderWidth: 0,
+    borderColor: 'transparent', 
+    marginRight: scale(3), 
   },
   circleGolden: {
-    width: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: scale(78 / 2), // Half of width/height to make it a circle
+    width: scale(78) - 4, 
+    height: scale(78) - 4, 
+    borderRadius: scale(78 / 2), 
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'gold', // Golden border color
-    marginRight: scale(3), // Keep the same spacing
+    borderWidth: 3, 
+    borderColor: 'gold', 
+    marginRight: scale(3), 
   },
   circleSilver: {
-    width: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: scale(78 / 2), // Half of width/height to make it a circle
+    width: scale(78) - 4, 
+    height: scale(78) - 4, 
+    borderRadius: scale(78 / 2),
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'silver', // Golden border color
-    marginRight: scale(3), // Keep the same spacing
+    borderWidth: 3, 
+    borderColor: 'silver', 
+    marginRight: scale(3), 
   },
   circleBronze: {
-    width: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: scale(78 / 2), // Half of width/height to make it a circle
+    width: scale(78) - 4, 
+    height: scale(78) - 4, 
+    borderRadius: scale(78 / 2), 
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: '#9E7015', // Golden border color
-    marginRight: scale(3), // Keep the same spacing
+    borderWidth: 3, 
+    borderColor: '#9E7015', 
+    marginRight: scale(3),
   },
 });

@@ -7,8 +7,7 @@ const PostPopup = ({ visible, onClose }: { visible: boolean; onClose: () => void
   const [selectedItem, setSelectedItem] = useState<{title: string; artist: string} | null>(null);
 
   const handleSelectItem = () => {
-    // Placeholder for Spotify API integration
-    // In future, this will open a Spotify search modal
+   
     setSelectedItem({
       title : 'Placeholder Song Title',
       artist: 'Placeholder Artist'
@@ -16,7 +15,7 @@ const PostPopup = ({ visible, onClose }: { visible: boolean; onClose: () => void
   };
 
   const handleSubmit = () => {
-  // Placeholder - post action disabled for now
+
 };
 
   return (

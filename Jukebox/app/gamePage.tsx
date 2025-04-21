@@ -3,9 +3,9 @@ import { View, TouchableOpacity } from 'react-native';
 import { Link, Stack } from 'expo-router';
 import { scale } from 'react-native-size-matters';
 import { StyleSheet } from 'react-native';
-import AlbumlyButton from '@/assets/gamePage_Icons/Albumly.svg'; // Updated path
-import ArtistlyButton from '@/assets/gamePage_Icons/Artistly.svg'; // Updated path
-import SonglyButton from '@/assets/gamePage_Icons/Songly.svg'; // Updated path
+import AlbumlyButton from '@/assets/gamePage_Icons/Albumly.svg'; 
+import ArtistlyButton from '@/assets/gamePage_Icons/Artistly.svg'; 
+import SonglyButton from '@/assets/gamePage_Icons/Songly.svg'; 
 import Trophy from '@/assets/gamePage_Icons/Trophy.svg';
 
 
@@ -13,7 +13,7 @@ export default function GamePage() {
  return (
    <View style={styles.container}>
      <Stack.Screen options={{ title: "Games" }} />
-     {/* Albumly Button with Trophy */}
+     {}
      <View style={styles.buttonRow}>
        <Link href="/albumly" asChild>
          <TouchableOpacity activeOpacity={0.7}>
@@ -26,7 +26,7 @@ export default function GamePage() {
      </View>
 
 
-     {/* Artistly Button with Trophy */}
+     {}
      <View style={styles.buttonRow}>
        <Link href="/artistly" asChild>
          <TouchableOpacity activeOpacity={0.7}>
@@ -39,7 +39,7 @@ export default function GamePage() {
      </View>
 
 
-     {/* Songly Button with Trophy */}
+     {}
      <View style={styles.buttonRow}>
        <Link href="/songly" asChild>
          <TouchableOpacity activeOpacity={0.7}>
@@ -63,13 +63,13 @@ const styles = StyleSheet.create({
    backgroundColor: '#808080',
  },
  buttonRow: {
-   flexDirection: 'row', // Align button and trophy in a row
-   alignItems: 'flex-end', // Align items to the bottom
-   marginVertical: scale(32), // Add spacing between rows
-   marginLeft: scale(-60), // Move the entire row to the left
+   flexDirection: 'row', 
+   alignItems: 'flex-end', 
+   marginVertical: scale(32), 
+   marginLeft: scale(-60), 
   },
  trophyContainer: {
-   marginLeft: scale(10), // Add spacing between button and trophy
-   marginBottom: scale(0), // Lower the trophy slightly
+   marginLeft: scale(10),
+   marginBottom: scale(0),
  },
 });

@@ -80,7 +80,7 @@ export default function AlbumGuessingGame() {
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   
-  // Initialize game with random album
+ 
   useEffect(() => {
     startNewGame();
   }, []);
@@ -107,18 +107,18 @@ export default function AlbumGuessingGame() {
   };
 
   const handleSubmit = () => {
-    if (!currentAlbum || !guess.trim()) return; // Don't proceed if input is empty
+    if (!currentAlbum || !guess.trim()) return; 
     
     if (guess.toLowerCase() === currentAlbum.name.toLowerCase()) {
       setGameStatus('won');
     } else {
-      useTry(); // Only consume try if answer is wrong and not empty
+      useTry(); 
     }
   };
 
   const handleSkip = () => {
-    useTry(); // Consumes a try but stays on same album
-    setGuess(''); // Clear the input field
+    useTry(); 
+    setGuess('');
   };
   const handleImageLoad = () => {
     setImageLoading(false);
@@ -134,7 +134,8 @@ export default function AlbumGuessingGame() {
     <View style={styles.container}>
       {currentAlbum && (
         <>
-          {/* Album Art Display */}
+
+          {}
           <View style={styles.albumArtContainer}>
             {imageLoading && (
               <ActivityIndicator size="large" color="#1DB954" style={styles.loader} />
@@ -147,7 +148,7 @@ export default function AlbumGuessingGame() {
             ) : (
               <Image 
                 source={{ uri: currentAlbum.imageUrl }}
-                blurRadius={gameStatus !== 'playing' ? 0 : blurLevel} // Unblur when game ends
+                blurRadius={gameStatus !== 'playing' ? 0 : blurLevel} 
                 style={[styles.albumArt, imageLoading && styles.hidden]}
                 resizeMode="cover"
                 onLoad={handleImageLoad}
@@ -156,7 +157,7 @@ export default function AlbumGuessingGame() {
             )}
           </View>
 
-          {/* Game Status */}
+          {}
           {gameStatus !== 'playing' && (
             <View style={styles.answerContainer}>
               <Text style={styles.answerTitle}>
@@ -167,7 +168,7 @@ export default function AlbumGuessingGame() {
             </View>
           )}
 
-          {/* Guess Input */}
+          {}
           <TextInput
             style={styles.input}
             placeholder="Enter album name..."
@@ -175,10 +176,10 @@ export default function AlbumGuessingGame() {
             value={guess}
             onChangeText={setGuess}
             editable={gameStatus === 'playing'}
-            onSubmitEditing={() => guess.trim() && handleSubmit()} // Only submit if not empty          
+            onSubmitEditing={() => guess.trim() && handleSubmit()}        
             />
           
-          {/* Action Buttons */}
+          {}
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={[styles.button, triesLeft === 0 && styles.disabledButton]} 
@@ -196,10 +197,10 @@ export default function AlbumGuessingGame() {
             </TouchableOpacity>
           </View>
           
-          {/* Tries Counter */}
+          {}
           <Text style={styles.triesText}>Tries Left: {triesLeft}</Text>
           
-          {/* New Game Button */}
+          {}
           {gameStatus !== 'playing' && (
             <TouchableOpacity style={styles.newGameButton} onPress={startNewGame}>
               <Text style={styles.buttonText}>New Album</Text>

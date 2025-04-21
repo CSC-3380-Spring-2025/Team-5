@@ -17,19 +17,19 @@ export default function ArtistlyPage() {
 
   return (
     <View style={styles.container}>
-      {/* Top Title */}
+      {}
       <Text style={styles.title}>Artistly</Text>
 
-      {/* Artist Info Section */}
+      {}
       <View style={styles.artistInfoContainer}>
-        {/* Profile Picture */}
+        {}
         {placeholderArtist.pfp ? (
           <Image source={{ uri: placeholderArtist.pfp }} style={styles.artistImage} />
         ) : (
           <View style={styles.placeholderImage} />
         )}
 
-        {/* Artist Attributes */}
+        {}
         <View style={styles.infoBoxes}>
           <View style={styles.infoBox}><Text style={styles.boxText}>Debut</Text></View>
           <View style={styles.infoBox}><Text style={styles.boxText}>Members</Text></View>
@@ -40,7 +40,7 @@ export default function ArtistlyPage() {
         </View>
       </View>
 
-      {/* Guess Input */}
+      {}
       <TextInput
         style={styles.input}
         placeholder="Enter artist name..."
@@ -49,7 +49,7 @@ export default function ArtistlyPage() {
         onChangeText={setGuess}
       />
 
-      {/* Buttons */}
+      {}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Skip</Text>
@@ -59,7 +59,7 @@ export default function ArtistlyPage() {
         </TouchableOpacity>
       </View>
 
-      {/* Tries Left */}
+      {}
       <Text style={styles.triesText}>Tries Left: {triesLeft}</Text>
     </View>
   );

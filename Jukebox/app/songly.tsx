@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // For play button icon
+import { Ionicons } from '@expo/vector-icons'; 
 
 export default function SonglyPage() {
   const [guess, setGuess] = useState('');
   const [currentTry, setCurrentTry] = useState(0);
 
-  // Placeholder for guesses
+ 
   const maxTries = 6;
   const guesses = Array.from({ length: maxTries }, (_, i) => i < currentTry ? `Guess ${i + 1}` : '');
 
   return (
     <View style={styles.container}>
-      {/* Title */}
+     
       <Text style={styles.title}>Songly</Text>
 
-      {/* Guess Rectangles */}
+     
       <View style={styles.guessContainer}>
         {guesses.map((g, idx) => (
           <View key={idx} style={styles.guessBox}>
@@ -24,7 +24,7 @@ export default function SonglyPage() {
         ))}
       </View>
 
-      {/* Timeline Bar */}
+    
       <View style={styles.timelineContainer}>
         <View style={[styles.timelineSegment, { flex: 1 }]} />
         <View style={[styles.timelineSegment, { flex: 2 }]} />
@@ -33,12 +33,12 @@ export default function SonglyPage() {
         <View style={[styles.timelineSegment, { flex: 15 }]} />
       </View>
 
-      {/* Play Button */}
+    
       <TouchableOpacity style={styles.playButton}>
         <Ionicons name="play" size={24} color="#fff" />
       </TouchableOpacity>
 
-      {/* Guess Input */}
+ 
       <TextInput
         style={styles.input}
         placeholder="Enter song name..."
@@ -47,7 +47,7 @@ export default function SonglyPage() {
         onChangeText={setGuess}
       />
 
-      {/* Buttons */}
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Skip</Text>
