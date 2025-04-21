@@ -183,7 +183,7 @@ export default function ProfilePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#808080',
+    backgroundColor: '#000000',
   },
   buttonContainer: {
     position: 'absolute', 
