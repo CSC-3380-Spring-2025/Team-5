@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         padding: 0,
         minWidth: 200,
-        elevation: 5,
+        elevation: 999,
+        zIndex: 999,
     },
     popupItem: {
         paddingVertical: 12,

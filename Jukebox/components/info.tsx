@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-
-
 interface InfoProps {
   type: 'album' | 'song';
   data: {
