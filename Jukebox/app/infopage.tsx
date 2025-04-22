@@ -1,38 +1,36 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { Stack } from 'expo-router';
 import RatingBlock from '@/components/RatingBlock';
-import NavigationBar from '@/components/NavigationBar';
+import InfoPageBanner from '@/components/infoPageBanner';
+import Info from '@/components/info';
+import FeaturedSongs from '@/components/featuredSongs';
+import SongList from '@/components/songList';
 
-
-const artistImage = 'https://via.placeholder.com/400x200.png?text=Artist+Header';
-
-const featuredTracks = [
-  { title: 'Timeless (feat Playboi Carti)', rating: 9.8 },
-  { title: 'One Of The Girls (with JEN...)', rating: 6.1 },
-  { title: 'Cry For Me', rating: 6.4 },
-  { title: 'Sao Paulo (feat. Anitta)', rating: 8.7 },
-  { title: 'Starboy', rating: 9.1 },
-];
-
-const albums = [
-  { title: 'Hurry Up Tomorrow', rating: 7.3 },
-  { title: 'Starboy (Deluxe)', rating: 8.1 },
-  { title: 'Live At SoFi Stadium', rating: 6.3 },
-];
+const artistInfo = {
+  type: 'album',
+  data: {
+    artists: ["The Weeknd"],
+    tracks: 16,
+    releaseDate: "2016-08-26",
+    label: "XO",
+  }
+};
 
 const InfoPage = () => {
   return (
     <View style={styles.wrapper}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        {}
-        <Image source={{ uri: artistImage }} style={styles.headerImage} />
-        <View style={styles.headerTextContainer}>
-          <Text style={styles.artistName}>The Weeknd</Text>
-          <Text style={styles.artistLabel}>ARTIST</Text>
-        </View>
-
-        {}
-        <RatingBlock rating={8.3} totalRatings={143000} />
+      <Stack.Screen options={{ headerShown: false }} />
+      <InfoPageBanner />
+      <RatingBlock rating={8.3} totalRatings={143000} />
+      <ScrollView>
+        <Info type='album' data={artistInfo.data} />
+        <FeaturedSongs />
+        <SongList />
+      </ScrollView>
+        {/* <Info type="album" data={albums} /> */}
+      {/* <View>
+        
 
         {}
         <View style={styles.section}>
@@ -58,10 +56,9 @@ const InfoPage = () => {
             </View>
           ))}
         </View>
-      </ScrollView>
-
+      </View> */}
+      <FeaturedSongs />
       {}
-      <NavigationBar />
     </View>
   );
 };
@@ -71,56 +68,56 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
   },
-  scroll: {
-    paddingBottom: 100,
-  },
-  headerImage: {
-    width: '100%',
-    height: 200,
-  },
-  headerTextContainer: {
-    padding: 16,
-  },
-  artistName: {
-    color: 'white',
-    fontSize: 28,
-    fontWeight: 'bold',
-  },
-  artistLabel: {
-    color: 'hsl(0, 0%, 70%)',
-    fontSize: 14,
-    marginTop: 4,
-  },
-  section: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
-  sectionTitle: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  itemRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 6,
-  },
-  itemText: {
-    color: 'white',
-    fontSize: 15,
-    flex: 1,
-  },
-  itemRating: {
-    color: 'white',
-    fontSize: 15,
-    marginLeft: 12,
-  },
-  moreText: {
-    color: 'hsl(0, 0%, 70%)',
-    fontSize: 14,
-    marginTop: 8,
-  },
+  // scroll: {
+  //   paddingBottom: 100,
+  // },
+  // headerImage: {
+  //   width: '100%',
+  //   height: 200,
+  // },
+  // headerTextContainer: {
+  //   padding: 16,
+  // },
+  // artistName: {
+  //   color: 'white',
+  //   fontSize: 28,
+  //   fontWeight: 'bold',
+  // },
+  // artistLabel: {
+  //   color: 'hsl(0, 0%, 70%)',
+  //   fontSize: 14,
+  //   marginTop: 4,
+  // },
+  // section: {
+  //   paddingHorizontal: 16,
+  //   paddingVertical: 10,
+  // },
+  // sectionTitle: {
+  //   color: 'white',
+  //   fontSize: 16,
+  //   fontWeight: 'bold',
+  //   marginBottom: 8,
+  // },
+  // itemRow: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   paddingVertical: 6,
+  // },
+  // itemText: {
+  //   color: 'white',
+  //   fontSize: 15,
+  //   flex: 1,
+  // },
+  // itemRating: {
+  //   color: 'white',
+  //   fontSize: 15,
+  //   marginLeft: 12,
+  // },
+  // moreText: {
+  //   color: 'hsl(0, 0%, 70%)',
+  //   fontSize: 14,
+  //   marginTop: 8,
+  // },
 });
 
 export default InfoPage;
