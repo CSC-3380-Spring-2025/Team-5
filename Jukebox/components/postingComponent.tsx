@@ -15,8 +15,11 @@ const PostPopup = ({ visible, onClose }: { visible: boolean; onClose: () => void
   };
 
   const handleSubmit = () => {
-
-};
+    console.log('Post submitted');
+    setCaption('');
+    setSelectedItem(null);
+    onClose();
+  };
 
   return (
     <Modal visible={visible} animationType="fade" transparent>
@@ -99,7 +102,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   cancelButton: {
-    marginRight: 15
+    marginRight: 15,
+    backgroundColor: 'black',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6
   },
   postButton: {
     backgroundColor: 'black',
