@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 import { scale } from 'react-native-size-matters';
@@ -8,12 +8,22 @@ import SearchIcon from '@/assets/navBar_Icons/Search_Icon_NB.svg';
 import PostIcon from '@/assets/navBar_Icons/Post_Icon_NB.svg';
 import GameIcon from '@/assets/navBar_Icons/Game_Icon_NB.svg'; 
 import ProfileIcon from '@/assets/navBar_Icons/Profile_Icon_NB.svg'; 
+import PostPopup from '@/components/postingComponent';
 
 
 
 
 const NavigationBar = () => {
-  
+  const [isPostPopUpVisible, setIsPostPopUpVisible] = useState(false);
+
+  const handlePostPress = () => {
+    setIsPostPopUpVisible(true);
+  };
+
+  const handleClosePostPopUp = () => {
+    setIsPostPopUpVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <Link href="/" asChild>
@@ -28,11 +38,14 @@ const NavigationBar = () => {
         </TouchableOpacity>
       </Link>
 
-      <Link href="/postPage" asChild>
+      <TouchableOpacity onPress={handlePostPress}>
+        <PostIcon width={scale(44)} height={scale(44)} />
+      </TouchableOpacity>
+      {/* <Link href="/postPage" asChild>
         <TouchableOpacity>
           <PostIcon width={scale(44)} height={scale(44)} />
         </TouchableOpacity>
-      </Link>
+      </Link> */}
 
       <Link href="/gamePage" asChild>
         <TouchableOpacity>
@@ -45,6 +58,11 @@ const NavigationBar = () => {
           <ProfileIcon width={scale(44)} height={scale(44)} />
         </TouchableOpacity>
       </Link>
+
+      <PostPopup 
+        visible={isPostPopUpVisible} 
+        onClose={handleClosePostPopUp}
+      />
     </View>
   );
 };

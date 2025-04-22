@@ -13,12 +13,6 @@ import { useEffect, useState } from 'react';
 import ProfilePicture from '@/components/ProfilePicture';
 import {getAuth, updateProfile} from 'firebase/auth';
 
-
-
-
-
-
-
 export default function ProfilePage() {
 const [showModal, setShowModal] = useState(false);
 const [profilePicture, setProfilePicture] = useState('defualtPFP.jpeg');
