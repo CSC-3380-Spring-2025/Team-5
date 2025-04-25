@@ -12,10 +12,14 @@ import Line from '@/components/HorizontalLine';
 import { useEffect, useState } from 'react';
 import ProfilePicture from '@/components/ProfilePicture';
 import {getAuth, updateProfile} from 'firebase/auth';
+import { useUser } from '@/context/UserContext';
+
 
 export default function ProfilePage() {
 const [showModal, setShowModal] = useState(false);
 const [profilePicture, setProfilePicture] = useState('defualtPFP.jpeg');
+const { user } = useUser();
+
 useEffect(() => {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -37,7 +41,7 @@ const imageMap: { [key: string]: any } = {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Username" }} />
+      <Stack.Screen options={{ title: user?.username || "Profile" }} />
       <View style={styles.container}>
         {}
         <View style={styles.textRow}>

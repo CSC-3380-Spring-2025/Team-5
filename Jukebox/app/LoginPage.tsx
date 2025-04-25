@@ -12,10 +12,14 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '@/config/firebase';
 import { router } from 'expo-router';
+import { useUser } from '@/context/UserContext';
+import type {User} from '@/context/UserContext';
+
 
 export default function LoginPage() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const { setUser } = useUser();
 
   const handleLogin = async (): Promise<void> => {
       try {
@@ -32,6 +36,7 @@ export default function LoginPage() {
           const userEmail = userDoc.data().email;
 
           await signInWithEmailAndPassword(auth, userEmail, password);
+          setUser(userDoc.data() as User);
           Alert.alert('Success', 'Logged in successfully!');
           console.log('Logged in successfully!');
           router.replace('/');
