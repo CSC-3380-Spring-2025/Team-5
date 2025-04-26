@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-
 interface MusicItem {
   id: string;
   name: string;
@@ -129,7 +128,6 @@ const styles = StyleSheet.create({
     color: 'white'
   },
 });
-
 
 const ExampleFeaturedList: React.FC = () => {
   const featuredAlbums: MusicItem[] = [
