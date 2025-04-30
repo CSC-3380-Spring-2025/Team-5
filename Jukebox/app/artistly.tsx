@@ -4,8 +4,10 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 import { SpotifyAuth } from '@/auth/spotifyAuth';
 import { Stack } from 'expo-router';
+
 import { getAuth } from 'firebase/auth';
 import { doc, updateDoc, increment } from 'firebase/firestore';
+import {router} from "expo-router";
 
 /*
  TODO: 
@@ -196,6 +198,20 @@ const incrementArtistlyStats = async () => {
         }}
       />
       <View style={styles.container}>
+         <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  top: 50,
+                  left: 20,
+                  padding:10,
+                  backgroundColor: '#1DB954', 
+                  borderRadius: 20,
+                  zIndex: 100,
+                }}
+                onPress={() => router.back()}
+              >
+                <Text style={{ color: 'white' }}>BACK</Text>
+              </TouchableOpacity>
         <Text style={styles.title}>{gameStatus === 'playing' ? '?' : currentArtist?.id}
         </Text>
         {/* Artist Info Section */}
