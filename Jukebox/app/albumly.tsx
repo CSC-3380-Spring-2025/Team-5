@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { router } from "expo-router";
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 interface Album {
   id: number;
@@ -132,6 +134,20 @@ export default function AlbumGuessingGame() {
 
   return (
     <View style={styles.container}>
+        <TouchableOpacity
+        style={{
+          position: 'absolute',
+          top: 50,
+          left: 20,
+          padding:10,
+          backgroundColor: '#1DB954', 
+          borderRadius:20,
+          zIndex: 100,
+        }}
+        onPress={() => router.back()}
+      >
+        <Text style={{ color: 'white' }}>BACK</Text>
+      </TouchableOpacity>
       {currentAlbum && (
         <>
 
