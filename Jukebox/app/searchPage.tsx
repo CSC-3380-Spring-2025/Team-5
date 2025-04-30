@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, FlatList, Pressable, Image } from 'react-native';
 import SearchBar from '@/components/SearchBar';
 import { WeatherButton } from '@/components/WeatherButton';
-import { SpotifyService, SpotifyArtist } from '@/services/SpotifyArtistService';
-import { SpotifySongService, SpotifySong } from '@/services/SpotifySongService';
-import { SpotifyAlbumService, SpotifyAlbum } from '@/services/SpotifyAlbumService';
+import { SpotifyService, SpotifyArtist } from '@/Services/SpotifyArtistService';
+import { SpotifySongService, SpotifySong } from '@/Services/SpotifySongService';
+import { SpotifyAlbumService, SpotifyAlbum } from '@/Services/SpotifyAlbumService';
 import { router, Stack } from 'expo-router';
 type SearchCategory = 'Artists' | 'Songs' | 'Albums';
 

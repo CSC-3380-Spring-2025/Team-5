@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { getAuth } from 'firebase/auth';
+import { doc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '@/config/firebase'; // adjust path if needed
 
 interface Album {
   id: number;
@@ -71,6 +74,20 @@ const albums: Album[] = [
   }
 ];
 
+const incrementAlbumlyStats = async () => {
+    const user = getAuth().currentUser;
+    if (!user) return;
+  
+    const ref = doc(db, 'users', user.uid);
+    try {
+      await updateDoc(ref, {
+        'albumly.won': increment(1),
+        'albumly.played': increment(1),
+      });
+    } catch (error) {
+      console.error('Failed to update albumly stats:', error);
+    }
+  };
 export default function AlbumGuessingGame() {
   const [guess, setGuess] = useState('');
   const [triesLeft, setTriesLeft] = useState(5);
@@ -111,6 +128,7 @@ export default function AlbumGuessingGame() {
     
     if (guess.toLowerCase() === currentAlbum.name.toLowerCase()) {
       setGameStatus('won');
+      incrementAlbumlyStats();
     } else {
       useTry(); 
     }

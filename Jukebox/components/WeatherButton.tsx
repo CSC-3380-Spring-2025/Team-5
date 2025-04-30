@@ -5,8 +5,8 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { getLocation, getCityFromCoords } from '@/services/locationService';
-import { getCurrentWeather } from '@/services/weatherService';
+import { getLocation, getCityFromCoords } from '@/Services/locationService';
+import { getCurrentWeather } from '@/Services/weatherService';
 
 type WeatherButtonProps = {
   onPress: (weather: string, message: string) => void;

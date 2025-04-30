@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
+import { getAuth } from 'firebase/auth';
+import { doc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '@/config/firebase'; // adjust path if needed
+
 
 const songs = [
   { title: "Blinding Lights", uri: require('../assets/Songs/blinding_lights.mp3') },
@@ -42,7 +46,23 @@ export default function SonglyPage() {
       console.error('Audio error:', e);
     }
   };
-
+  
+  const incrementSonglyStats = async () => {
+    const user = getAuth().currentUser;
+    if (!user) return;
+  
+    const ref = doc(db, 'users', user.uid);
+    try {
+      await updateDoc(ref, {
+        'songly.won': increment(1),
+        'songly.played': increment(1),
+      });
+    } catch (error) {
+      console.error('Failed to update Songly stats:', error);
+    }
+  };
+  
+  
   const handleGuessSubmit = () => {
     const isCorrect =
       guess.trim().toLowerCase() === currentSong.title.toLowerCase();
@@ -52,7 +72,8 @@ export default function SonglyPage() {
   
     if (isCorrect) {
       setShowCorrectPopup(true);
-  
+      incrementSonglyStats();
+
       setTimeout(() => {
         setShowCorrectPopup(false);
         moveToNextSong();
