@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-// Define interfaces for our component props and data structure
 interface MusicItem {
   id: string;
   name: string;
@@ -15,15 +14,13 @@ interface FeaturedListProps {
   items: MusicItem[];
 }
 
-// Each Featured List will contain a title and an array of 5 items (those items being arists, songs, or albums)
 const FeaturedList: React.FC<FeaturedListProps> = ({ title, items }) => {
-  // This function renders star ratings (1-5)
   const renderStars = (rating: number): React.ReactNode[] => {
     const stars: React.ReactNode[] = [];
     const fullStars: number = Math.floor(rating);
     const hasHalfStar: boolean = rating - fullStars >= 0.5;
     
-    // Add full stars
+    
     for (let i = 0; i < fullStars; i++) {
       stars.push(
         <AntDesign 
@@ -36,7 +33,6 @@ const FeaturedList: React.FC<FeaturedListProps> = ({ title, items }) => {
       );
     }
     
-    // Add half star if needed
     if (hasHalfStar) {
       stars.push(
         <AntDesign 
@@ -49,7 +45,6 @@ const FeaturedList: React.FC<FeaturedListProps> = ({ title, items }) => {
       );
     }
     
-    // Add empty stars to make total of 5
     const emptyStars: number = 5 - fullStars - (hasHalfStar ? 1 : 0);
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
@@ -68,25 +63,20 @@ const FeaturedList: React.FC<FeaturedListProps> = ({ title, items }) => {
 
   return (
     <View style={styles.container}>
-      {/* Featured List Title */}
       <Text style={styles.title}>{title}</Text>
-      {/* Horizonal Scroll List */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {items.map((item, index) => (
           <View key={index} style={styles.itemContainer}>
-            {/* Associated Image (this will be artist pfp, song cover, or album cover) */}
             <Image 
               source={{ uri: item.imageUrl }} 
               style={styles.coverImage}
               resizeMode="cover"
             />
             
-            {/* Star rating */}
             <View style={styles.ratingContainer}>
               {renderStars(item.rating)}
             </View>
             
-            {/* Name of album, artist, or song */}
             {item.name && (
               <Text numberOfLines={1} style={styles.itemName}>
                 {item.name}
@@ -99,7 +89,6 @@ const FeaturedList: React.FC<FeaturedListProps> = ({ title, items }) => {
   );
 };
 
-// Styling for the featured list
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
@@ -140,8 +129,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Example of what it would look like using placeholders
-// You can see what it looks like by putting <ExampleFeaturedList /> in index
 const ExampleFeaturedList: React.FC = () => {
   const featuredAlbums: MusicItem[] = [
     {

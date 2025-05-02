@@ -9,13 +9,12 @@ const PostPopup = ({ visible, onClose }: { visible: boolean; onClose: () => void
   const [selectedItem, setSelectedItem] = useState<{ title: string; artist: string } | null>(null);
 
   const handleSelectItem = () => {
-    // Placeholder for Spotify API integration
     setSelectedItem({
       title: 'Placeholder Song Title',
       artist: 'Placeholder Artist',
     });
   };
-
+      
   const handleSubmit = async () => {
     if (!selectedItem || caption.trim() === '') {
       Alert.alert('Missing Info', 'Please select a song and write a caption.');
@@ -130,6 +129,10 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     marginRight: 15,
+    backgroundColor: 'black',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6
   },
   postButton: {
     backgroundColor: 'black',

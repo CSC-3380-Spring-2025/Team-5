@@ -11,7 +11,7 @@ import{
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/config/firebase';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { UserData } from './types/user';
 
 export default function SignUpScreen() {
@@ -72,6 +72,7 @@ export default function SignUpScreen() {
 
   return(
     <SafeAreaView style={styles.container}>
+      <Stack.Screen options={{ title: "" }} />
       <View style={styles.form}> 
         <Text style={styles.heading}>Sign Up For Jukebox!</Text>
 
@@ -112,13 +113,13 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000', // black background
+    backgroundColor: '#000', 
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
   form: {
-    backgroundColor: '#D9A9E2', // light purple
+    backgroundColor: '#D9A9E2', 
     borderRadius: 16,
     padding: 24,
     width: '100%',
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#B57EDC', // medium purple
+    backgroundColor: '#B57EDC', 
     paddingVertical: 14,
     paddingHorizontal: 32,
     borderRadius: 8,
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     fontSize: 52,
     fontWeight: '900',
     marginTop:30,
-    color: '#B57EDC', // purple for brand
+    color: '#B57EDC', 
     backgroundColor: '#000',
     padding: 20,
     borderRadius: 50,

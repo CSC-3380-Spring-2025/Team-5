@@ -34,7 +34,7 @@ const UserPost = () => {
   };
 
   return (
-    <View style={{ padding: 15, borderBottomWidth: 1, borderColor: '#ddd' }}>
+    <View style={{ padding: 15, borderBottomWidth: 1, borderColor: '#ddd', backgroundColor: 'black' }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
         <TouchableOpacity onPress={handleProfilePress}>
           <Image 
@@ -43,11 +43,11 @@ const UserPost = () => {
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleProfilePress}>
-          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Username</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'white' }}>Username</Text>
         </TouchableOpacity>
       </View>
       
-      <View style={{ backgroundColor: 'black', padding: 10, borderRadius: 10, flexDirection: 'row', alignItems: 'center', marginBottom: 10, position: 'relative' }}>
+      <View style={{ backgroundColor: 'black', padding: 10, borderRadius: 10, borderColor: 'grey', borderWidth: .5, flexDirection: 'row', alignItems: 'center', marginBottom: 10, position: 'relative' }}>
         <Image 
           source={{ uri: album.cover }} 
           style={{ width: 80, height: 80, borderRadius: 10, marginRight: 10, resizeMode: 'contain' }} 
@@ -61,20 +61,20 @@ const UserPost = () => {
         </TouchableOpacity>
       </View>
       
-      <Text style={{ fontSize: 14, marginBottom: 10 }}>This is a placeholder for the post description. It can be multiple lines long.</Text>
+      <Text style={{ fontSize: 14, marginBottom: 10, color: 'white' }}>This is a placeholder for the post description. It can be multiple lines long.</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity onPress={handleLike} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
-            <FontAwesome name={liked ? 'heart' : 'heart-o'} size={20} color={liked ? 'red' : 'black'} />
-            <Text style={{ marginLeft: 5 }}>{likes}</Text>
+            <FontAwesome name={liked ? 'heart' : 'heart-o'} size={20} color={liked ? 'red' : 'white'} />
+            <Text style={{ marginLeft: 5, color: 'white' }}>{likes}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCommentPress} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
-            <FontAwesome name="comment-o" size={20} color="black" />
-            <Text style={{ marginLeft: 5 }}>0</Text>
+            <FontAwesome name="comment-o" size={20} color="white" />
+            <Text style={{ marginLeft: 5, color: 'white' }}>0</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={handleAddToLibrary}>
-          <FontAwesome name="plus" size={20} color="black" />
+          <FontAwesome name="plus" size={20} color="white" />
         </TouchableOpacity>
       </View>
     </View>
