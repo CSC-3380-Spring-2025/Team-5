@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, FlatList, Pressable, Image } from 'react-native';
 import SearchBar from '@/components/SearchBar';
 import { WeatherButton } from '@/components/WeatherButton';
-import { SpotifyService, SpotifyArtist } from '@/services/SpotifyArtistService';
-import { SpotifySongService, SpotifySong } from '@/services/SpotifySongService';
-import { SpotifyAlbumService, SpotifyAlbum } from '@/services/SpotifyAlbumService';
+import { SpotifyService, SpotifyArtist } from '@/Services/SpotifyArtistService';
+import { SpotifySongService, SpotifySong } from '@/Services/SpotifySongService';
+import { SpotifyAlbumService, SpotifyAlbum } from '@/Services/SpotifyAlbumService';
 import { router, Stack } from 'expo-router';
+import FavoriteButton from '@/components/FavoriteButton';
+
+
 type SearchCategory = 'Artists' | 'Songs' | 'Albums';
 
 export default function SearchPage() {
@@ -65,17 +68,15 @@ export default function SearchPage() {
 
   const renderItem = ({ item }: { item: SpotifyArtist | SpotifySong | SpotifyAlbum }) => {
     let imageUrl = null;
-    
+  
     if ('images' in item && item.images[0]) {
-      // For artists and albums
       imageUrl = item.images[0].url;
     } else if ('album' in item && item.album.images[0]) {
-      // For songs
       imageUrl = item.album.images[0].url;
     }
-
+  
     return (
-      <Pressable 
+      <Pressable
         onPress={() => handleItemPress(item)}
         style={({ pressed }) => [
           styles.resultItem,
@@ -83,35 +84,47 @@ export default function SearchPage() {
         ]}
       >
         {imageUrl && (
-          <Image 
-            source={{ uri: imageUrl }} 
+          <Image
+            source={{ uri: imageUrl }}
             style={[
               styles.albumImage,
               (category === 'Albums' || category === 'Songs') && styles.squareImage
             ]}
           />
         )}
-        <View style={styles.spotifyItemInfo}>
-          <Text style={styles.spotifyItemName}>{item.name}</Text>
-          {'artists' in item && (
-            <Text style={styles.spotifyItemDetails}>
-              {item.artists.map(a => a.name).join(', ')}
-            </Text>
-          )}
+  
+        {/* Text + Favorite button in a row */}
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.spotifyItemName}>{item.name}</Text>
+            {'artists' in item && (
+              <Text style={styles.spotifyItemDetails}>
+                {item.artists.map(a => a.name).join(', ')}
+              </Text>
+            )}
+          </View>
+  
+          <FavoriteButton
+            id={item.id}
+            type={
+              'album' in item ? 'album' :
+              'artists' in item ? 'track' :
+              'artist'
+            }
+          />
         </View>
       </Pressable>
     );
   };
+  
 
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Search" }} />
-      {/* ✅ Weather Display */}
       <View style={styles.weatherContainer}>
         <WeatherButton onPress={handleWeatherPress} />
       </View>
 
-      {/* Category Buttons */}
       <View style={styles.buttonGroup}>
         {categories.map((cat) => (
           <Pressable
@@ -124,10 +137,8 @@ export default function SearchPage() {
         ))}
       </View>
 
-      
       <SearchBar onSearch={handleSearch} selectedCategory={category} />
 
-    
       <Text style={styles.resultsTitle}>Results in {category}:</Text>
       {isLoading ? (
         <Text style={styles.loadingText}>Loading...</Text>
@@ -223,3 +234,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
 });
+
+

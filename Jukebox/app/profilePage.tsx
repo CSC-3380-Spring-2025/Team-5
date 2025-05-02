@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Modal } from 'react-native'; 
 import { Link, Stack } from 'expo-router';
 import { scale } from 'react-native-size-matters';
 import { StyleSheet } from 'react-native';
@@ -13,12 +13,72 @@ import { useEffect, useState } from 'react';
 import ProfilePicture from '@/components/ProfilePicture';
 import {getAuth, updateProfile} from 'firebase/auth';
 import { useUser } from '@/context/UserContext';
+import { db } from '@/config/firebase';
+import { doc, updateDoc } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
 
 
 export default function ProfilePage() {
 const [showModal, setShowModal] = useState(false);
 const [profilePicture, setProfilePicture] = useState('defualtPFP.jpeg');
-const { user } = useUser();
+const { user, setUser } = useUser();
+const [showBio, setShowBio] = useState(false);
+const [editingBio, setEditingBio] = useState(false);
+const [bioText, setBioText] = useState(user?.bio || '');
+const [featuredSongs, setFeaturedSongs] = useState<FeaturedItem[]>([]);
+const [featuredAlbums, setFeaturedAlbums] = useState<FeaturedItem[]>([]);
+const [featuredArtists, setFeaturedArtists] = useState<FeaturedItem[]>([]);
+
+
+
+type FeaturedItem = {
+  id: string;
+  image: string;
+};
+
+
+useEffect(() => {
+  if (user?.bio) {
+    setBioText(user.bio);
+  }
+}, [user?.bio]);
+useEffect(() => {
+  const fetchFeaturedMedia = async () => {
+    if (!user?.userId) return;
+
+    try {
+      const userRef = doc(db, 'users', user.userId);
+      const docSnap = await getDoc(userRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setFeaturedSongs((data.featuredSongs || []).slice(0, 4));
+        setFeaturedArtists((data.featuredArtists || []).slice(0, 4));
+        setFeaturedAlbums((data.featuredAlbums || []).slice(0, 4));
+      }
+    } catch (error) {
+      console.error('Error fetching featured media:', error);
+    }
+  };
+
+  fetchFeaturedMedia();
+}, [user?.userId]);
+
+const handleSaveBio = async () => {
+  if (!user) return;
+
+  try {
+    const userRef = doc(db, 'users', user.userId);
+    await updateDoc(userRef, { bio: bioText });
+
+    
+    setUser({ ...user, bio: bioText });
+    setEditingBio(false);
+  } catch (error) {
+    console.error('Error saving bio:', error);
+  }
+};
+
 
 useEffect(() => {
   const auth = getAuth();
@@ -51,16 +111,110 @@ const imageMap: { [key: string]: any } = {
 
       {}
         <View style={styles.numberRow}>
-          <Text style={styles.number}>1.2m</Text>
-          <Text style={styles.number}>5</Text>
+        <Text style={styles.number}>{user?.followers?.length || 0}</Text> 
+        <Text style={styles.number}>{user?.following?.length || 0}</Text>
         </View>
 
       {}
       <View style={styles.bioContainer}>
-        <Text style={styles.bioText}>
-          This is a sample bio. It is centered and limited to 100 characters.
-        </Text>
-      </View>
+  {editingBio ? (
+    <>
+      <TextInput
+        style={styles.bioText}
+        value={bioText}
+        onChangeText={setBioText}
+        placeholder="Write something about yourself"
+        placeholderTextColor="#888"
+      />
+      <TouchableOpacity onPress={handleSaveBio}>
+        <Text style={{ color: 'white', marginTop: 10 }}>Save</Text>
+      </TouchableOpacity>
+    </>
+  ) : (
+    <>
+      <Text style={styles.bioText}>
+        {user?.bio
+          ? user.bio.length > 10
+            ? user.bio.substring(0, 5) + '...'
+            : user.bio
+          : 'No bio yet.'}
+      </Text>
+
+      {(user?.bio?.length ?? 0) > 10 && ( 
+        <TouchableOpacity onPress={() => setShowBio(true)}> 
+          <Text style={{ color: '#aaa', fontSize: 14, marginTop: 5 }}> 
+            Show more 
+          </Text> 
+        </TouchableOpacity> 
+      )} 
+     {getAuth().currentUser?.uid === user?.userId && ( 
+  <TouchableOpacity onPress={() => {
+    setEditingBio(true); 
+    setShowBio(true);             
+  }}>
+    <Text style={{ color: 'white', marginTop: 10 }}>Edit Bio</Text>
+  </TouchableOpacity>
+)}
+
+    </>
+  )}
+</View>
+<Modal
+  visible={showBio}
+  transparent
+  animationType="slide"
+  onRequestClose={() => {
+    setShowBio(false);
+    setEditingBio(false);
+  }}
+>
+  <View style={styles.modalBackground}>
+    <View style={styles.bioModalBox}>
+      {editingBio ? (
+        <>
+          <Text style={styles.fullBioText}>Edit your bio</Text>
+
+          <TextInput
+            style={styles.bioInput}
+            value={bioText}
+            onChangeText={(text) => {
+              if (text.length <= 100) setBioText(text);
+            }}
+            placeholder="Write something about yourself"
+            placeholderTextColor="#888"
+            multiline
+            maxLength={100}
+          />
+
+          <Text style={{ color: '#ccc', fontSize: 12 }}>{bioText.length}/100</Text>
+
+          <TouchableOpacity onPress={handleSaveBio}>
+            <Text style={styles.closeModal}>Save</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              setShowBio(false);
+              setEditingBio(false);
+            }}
+          >
+            <Text style={[styles.closeModal, { color: '#888' }]}>Cancel</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <Text style={styles.fullBioText}>{user?.bio || 'No bio yet.'}</Text>
+          <TouchableOpacity onPress={() => setShowBio(false)}>
+            <Text style={styles.closeModal}>Close</Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
+  </View>
+</Modal>
+
+
+
 
 
 
@@ -100,87 +254,29 @@ const imageMap: { [key: string]: any } = {
 
         {}
         <View style={styles.rectangleRow2}>
-          <View style={styles.rectangleGolden}>
-            <Image
-              source={require('@/assets/r6.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangleSilver}>
-            <Image
-              source={require('@/assets/r22.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangleBronze}>
-            <Image
-              source={require('@/assets/r23.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangle}>
-            <Image
-              source={require('@/assets/r24.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-        </View>
+  {featuredAlbums.map((album, index) => (
+    <View key={index} style={styles.rectangle}>
+      <Image source={{ uri: album.image }} style={styles.rankImage} />
+    </View>
+  ))}
+</View>
 
-        {}
-        <View style={styles.rectangleRow}>
-          <View style={styles.rectangleGolden}>
-            <Image
-              source={require('@/assets/Top4Songs/r1.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangleSilver}>
-            <Image
-              source={require('@/assets/Top4Songs/r2.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangleBronze}>
-            <Image
-              source={require('@/assets/Top4Songs/r5.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangle}>
-            <Image
-              source={require('@/assets/Top4Songs/r4.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-        </View>
+<View style={styles.rectangleRow}>
+  {featuredSongs.map((song, index) => (
+    <View key={index} style={styles.rectangle}>
+      <Image source={{ uri: song.image }} style={styles.rankImage} />
+    </View>
+  ))}
+</View>
 
-        
-        <View style={styles.circleRow}>
-          <View style={styles.circleGolden}>
-            <Image
-              source={require('@/assets/Top4Artists/c1.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.circleSilver}>
-            <Image
-              source={require('@/assets/Top4Artists/c2.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.circleBronze}>
-            <Image
-              source={require('@/assets/Top4Artists/c3.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.circle}>
-            <Image
-              source={require('@/assets/Top4Artists/c5.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-        </View>
+<View style={styles.circleRow}>
+  {featuredArtists.map((artist, index) => (
+    <View key={index} style={styles.circle}>
+      <Image source={{ uri: artist.image }} style={styles.rankImage} />
+    </View>
+  ))}
+</View>
+
 
      
         <View style={styles.buttonContainer}>
@@ -263,7 +359,7 @@ const styles = StyleSheet.create({
   profilePicture: {
     position: 'absolute',
     width: scale(119),
-    height: scale(119),
+    height: scale(110),
     borderRadius: scale(119 / 2),
     overflow: 'hidden',
     borderWidth: scale(2),
@@ -274,13 +370,53 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
   },
+
+  modalBackground: { 
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bioModalBox: { 
+    backgroundColor: '#1e1e1e',
+    padding: 30,
+    borderRadius: 12,
+    width: '80%',
+    alignItems: 'center',
+  },
+  fullBioText: { 
+    fontSize: scale(16),
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  closeModal: { 
+    color: '#B57EDC',
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  
   bioContainer: {
     position: 'absolute',
     alignItems: 'center', 
-    marginTop: scale(160), 
+    marginTop: scale(149), 
+    width: '85%',
     paddingHorizontal: scale(20), 
     marginLeft: scale(30),
+    
   },
+  bioInput: {
+    backgroundColor: '#222',
+    color: '#fff',
+    padding: 12,
+    borderRadius: 8,
+    fontSize: scale(15),
+    width: '100%',
+    minHeight: 80,
+    textAlignVertical: 'top',
+    marginBottom: 10,
+  },
+  
   bioText: {
     fontSize: scale(15), 
     color: '#FFFFFF', 

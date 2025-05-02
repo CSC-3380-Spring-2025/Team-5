@@ -4,6 +4,9 @@ export interface User {
   username: string;
   email: string;
   [key: string]: any;
+  bio?: string; 
+  followers?: string[]; 
+  following?: string[]; 
 }
 
 interface UserContextType {
