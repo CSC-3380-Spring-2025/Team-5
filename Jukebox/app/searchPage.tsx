@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, FlatList, Pressable, Image } from 'react-native';
 import SearchBar from '@/components/SearchBar';
 import { WeatherButton } from '@/components/WeatherButton';
-import { SpotifyService, SpotifyArtist } from '@/services/SpotifyArtistService';
-import { SpotifySongService, SpotifySong } from '@/services/SpotifySongService';
-import { SpotifyAlbumService, SpotifyAlbum } from '@/services/SpotifyAlbumService';
-
-import { searchUsers } from '@/services/searchUsers';
+import { SpotifyService, SpotifyArtist } from '@/Services/SpotifyArtistService';
+import { SpotifySongService, SpotifySong } from '@/Services/SpotifySongService';
+import { SpotifyAlbumService, SpotifyAlbum } from '@/Services/SpotifyAlbumService';
+import { Linking } from 'react-native';
+import { searchUsers } from '@/Services/searchUsers';
 import { router, Stack } from 'expo-router';
 import { User } from '@/context/UserContext';
 
@@ -73,9 +73,32 @@ export default function SearchPage() {
     }
   };
 
-  const handleWeatherPress = (weather: string, message: string) => {
-    console.log(message);
+  const handleWeatherPress = async (weather: string, message: string) => {
+    console.log(message); // debugging or logging
+  
+    const weatherToPlaylist: Record<string, string> = {
+      Clear: 'https://open.spotify.com/playlist/37i9dQZF1DX1BzILRveYHb?si=fA2nEPeASNmbLb0N8c-K9g', 
+      Rain: 'https://open.spotify.com/playlist/37i9dQZF1EIh5QTm0PNBlW?si=jgwb18RQQ562kCK_uhPM0g',  
+      Clouds: 'https://open.spotify.com/playlist/37i9dQZF1EIgxHuuVqSn9D?si=6dhnV98KQWit_beAKKinGg', 
+      Mist: 'https://open.spotify.com/playlist/3MpipEMiLninINFu5gBAGE?si=8nOhXCGSTe-lVoeBQCemkQ',  
+      Thunderstorm: 'https://open.spotify.com/playlist/37i9dQZF1EIeOmlQSSmx93?si=ZpUZKnEGT3anGMZoW4e24A', 
+      Snow: 'https://open.spotify.com/playlist/4raqLXnmb8WYkjfed9olAR?si=ykgeTjbCQkWGccmqadKwAA', 
+    };
+  
+    const url = weatherToPlaylist[weather] || 'https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO'; 
+  
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        console.warn("Can't open Spotify playlist URL");
+      }
+    } catch (error) {
+      console.error("Error opening playlist:", error);
+    }
   };
+  
 
   const handleItemPress = (item: SpotifyArtist | SpotifySong | SpotifyAlbum | User) => {
     router.push('/infopage');
@@ -137,7 +160,7 @@ export default function SearchPage() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Search" }} />
-      {/* ✅ Weather Display */}
+      {/*  Weather Display */}
       <View style={styles.weatherContainer}>
         <WeatherButton onPress={handleWeatherPress} />
       </View>
