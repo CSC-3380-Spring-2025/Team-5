@@ -5,12 +5,17 @@ import { WeatherButton } from '@/components/WeatherButton';
 import { SpotifyService, SpotifyArtist } from '@/services/SpotifyArtistService';
 import { SpotifySongService, SpotifySong } from '@/services/SpotifySongService';
 import { SpotifyAlbumService, SpotifyAlbum } from '@/services/SpotifyAlbumService';
+
+import { searchUsers } from '@/services/searchUsers';
 import { router, Stack } from 'expo-router';
-type SearchCategory = 'Artists' | 'Songs' | 'Albums';
+import { User } from '@/context/UserContext';
+
+type SearchCategory = 'Artists' | 'Songs' | 'Albums' | 'Users';
+const placeholderImage: any = require('@/assets/PFP/defaultPFP.jpeg');
 
 export default function SearchPage() {
   const [category, setCategory] = useState<SearchCategory>('Artists');
-  const [results, setResults] = useState<(SpotifyArtist | SpotifySong | SpotifyAlbum)[]>([]);
+  const [results, setResults] = useState<(SpotifyArtist | SpotifySong | SpotifyAlbum | User)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const spotifyArtistService = SpotifyService.getInstance();
   const spotifySongService = SpotifySongService.getInstance();
@@ -50,6 +55,21 @@ export default function SearchPage() {
       } finally {
         setIsLoading(false);
       }
+    } else if (category === 'Users') {
+      try {
+        const userResults = await searchUsers(query);
+        const formattedUserResults = userResults.map(user => ({
+          ...user,
+          username: user.username,
+          picture: user.profilePicture || placeholderImage,
+        }));
+        setResults(formattedUserResults);
+      } catch (error) {
+        console.error('Error searching users:', error);
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -57,49 +77,60 @@ export default function SearchPage() {
     console.log(message);
   };
 
-  const handleItemPress = (item: SpotifyArtist | SpotifySong | SpotifyAlbum) => {
+  const handleItemPress = (item: SpotifyArtist | SpotifySong | SpotifyAlbum | User) => {
     router.push('/infopage');
   };
 
-  const categories: SearchCategory[] = ['Artists', 'Songs', 'Albums'];
+  const categories: SearchCategory[] = ['Artists', 'Songs', 'Albums', 'Users'];
 
-  const renderItem = ({ item }: { item: SpotifyArtist | SpotifySong | SpotifyAlbum }) => {
+  const renderItem = ({ item }: { item: SpotifyArtist | SpotifySong | SpotifyAlbum | User }) => {
     let imageUrl = null;
-    
+    let title = '';
+    let subtitle = '';
+
     if ('images' in item && item.images[0]) {
-      // For artists and albums
       imageUrl = item.images[0].url;
+      title = item.name;
+      if ('artists' in item) {
+        subtitle = item.artists.map((a: { name: string }) => a.name).join(', ');
+      }
     } else if ('album' in item && item.album.images[0]) {
-      // For songs
       imageUrl = item.album.images[0].url;
+      title = item.name;
+      subtitle = item.artists.map((a: { name: string }) => a.name).join(', ');
+    } else if ('username' in item) {
+      if (item.profilePicture) {
+        imageUrl = { uri: item.profilePicture };
+      } else {
+        imageUrl = placeholderImage;
+      }
+      title = item.username;
     }
 
     return (
       <Pressable 
-        onPress={() => handleItemPress(item)}
-        style={({ pressed }) => [
-          styles.resultItem,
-          pressed && styles.resultItemPressed
-        ]}
-      >
-        {imageUrl && (
-          <Image 
-            source={{ uri: imageUrl }} 
-            style={[
-              styles.albumImage,
-              (category === 'Albums' || category === 'Songs') && styles.squareImage
-            ]}
-          />
-        )}
-        <View style={styles.spotifyItemInfo}>
-          <Text style={styles.spotifyItemName}>{item.name}</Text>
-          {'artists' in item && (
-            <Text style={styles.spotifyItemDetails}>
-              {item.artists.map(a => a.name).join(', ')}
-            </Text>
-          )}
-        </View>
-      </Pressable>
+      onPress={() => handleItemPress(item)}
+      style={({ pressed }) => [
+        styles.resultItem,
+        pressed && styles.resultItemPressed
+      ]}
+    >
+      {imageUrl ? (
+        <Image 
+          source={imageUrl}
+          style={[
+            styles.albumImage,
+            (category === 'Albums' || category === 'Songs') && styles.squareImage
+          ]}
+        />
+      ) : null}
+      <View style={styles.spotifyItemInfo}>
+        <Text style={styles.spotifyItemName}>{title}</Text>
+        {subtitle ? (
+          <Text style={styles.spotifyItemDetails}>{subtitle}</Text>
+        ) : null}
+      </View>
+    </Pressable>
     );
   };
 
