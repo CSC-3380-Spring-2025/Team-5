@@ -5,6 +5,7 @@ import { WeatherButton } from '@/components/WeatherButton';
 import { SpotifyService, SpotifyArtist } from '@/services/SpotifyArtistService';
 import { SpotifySongService, SpotifySong } from '@/services/SpotifySongService';
 import { SpotifyAlbumService, SpotifyAlbum } from '@/services/SpotifyAlbumService';
+
 import { searchUsers } from '@/services/searchUsers';
 import { router, Stack } from 'expo-router';
 import { User } from '@/context/UserContext';
