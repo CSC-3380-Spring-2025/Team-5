@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { db, auth } from '../config/firebase'; // Adjust the path if needed
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
+function generatePostId(): string {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
 
 const PostPopup = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
   const [caption, setCaption] = useState('');
   const [selectedItem, setSelectedItem] = useState<{ title: string; artist: string } | null>(null);
 
+  
   const handleSelectItem = () => {
     setSelectedItem({
       title: 'Placeholder Song Title',
@@ -21,30 +27,23 @@ const PostPopup = ({ visible, onClose }: { visible: boolean; onClose: () => void
       return;
     }
 
-    const user = auth.currentUser;
+    const user = getAuth().currentUser;
+    
     if (!user) {
       Alert.alert('Not Authenticated', 'Please log in to submit a post.');
       return;
     }
+    await addDoc(collection(db, 'users', user.uid, 'posts'), {
+      postId: generatePostId(),
+      content: caption.trim(),
+      createdAt: serverTimestamp(),
+      userId: user.uid,
+      likes: 0,
+      comments: [],
+    });
 
-    try {
-      await addDoc(collection(db, 'users', user.uid, 'posts'), {
-        caption: caption.trim(),
-        song: {
-          title: selectedItem.title,
-          artist: selectedItem.artist,
-        },
-        createdAt: serverTimestamp(),
-      });
+    onClose();
 
-      // Clear form and close modal
-      setCaption('');
-      setSelectedItem(null);
-      onClose();
-    } catch (error) {
-      console.error('Error submitting post:', error);
-      Alert.alert('Error', 'There was a problem submitting your post.');
-    }
   };
 
   return (
