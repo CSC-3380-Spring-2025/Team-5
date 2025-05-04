@@ -5,9 +5,12 @@ import { db } from '@/config/firebase';
 import { SpotifyAuth } from '@/auth/spotifyAuth';
 import { Stack } from 'expo-router';
 
+import { getAuth } from 'firebase/auth';
+import { doc, updateDoc, increment } from 'firebase/firestore';
+import {router} from "expo-router";
+
 /*
  TODO: 
-  update user's wins and losses
   Make squares red when they are incorrect and game ends
   Add members hint similar to debut and popularity
 */
@@ -112,6 +115,22 @@ export default function ArtistlyPage() {
     }
   };
 
+  
+const incrementArtistlyStats = async () => {
+    const user = getAuth().currentUser;
+    if (!user) return;
+  
+    const ref = doc(db, 'users', user.uid);
+    try {
+      await updateDoc(ref, {
+        'artistly.won': increment(1),
+        'artistly.played': increment(1),
+      });
+    } catch (error) {
+      console.error('Failed to update Artistly stats:', error);
+    }
+  };
+  
   const onGuessSubmit = () => {
     if (guess === currentArtist?.id) {  // win
       setGuess('');
@@ -122,6 +141,7 @@ export default function ArtistlyPage() {
       setCorrectGenre(true);
       setCorrectNationality(true);
       setGameStatus('won');
+      incrementArtistlyStats();
     } else if (triesLeft > 1) { // determine if guessed artist has some correct attributes
       let guessedArtist = allArtists.find(artist => artist.id === guess);
       if (guessedArtist?.Debut === currentArtist?.Debut) {
@@ -178,6 +198,20 @@ export default function ArtistlyPage() {
         }}
       />
       <View style={styles.container}>
+         <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  top: 50,
+                  left: 20,
+                  padding:10,
+                  backgroundColor: '#1DB954', 
+                  borderRadius: 20,
+                  zIndex: 100,
+                }}
+                onPress={() => router.back()}
+              >
+                <Text style={{ color: 'white' }}>BACK</Text>
+              </TouchableOpacity>
         <Text style={styles.title}>{gameStatus === 'playing' ? '?' : currentArtist?.id}
         </Text>
         {/* Artist Info Section */}

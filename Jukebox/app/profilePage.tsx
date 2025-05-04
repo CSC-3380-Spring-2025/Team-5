@@ -101,7 +101,7 @@ const imageMap: { [key: string]: any } = {
 
   return (
     <>
-      <Stack.Screen options={{ title: user?.username || "Profile" }} />
+      <Stack.Screen options={{ title: `Welcome ${user?.username || ''}` }} />
       <View style={styles.container}>
         {}
         <View style={styles.textRow}>

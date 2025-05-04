@@ -3,6 +3,14 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 
+import { getAuth } from 'firebase/auth';
+import { doc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '@/config/firebase'; // adjust path if needed
+
+
+import { router } from "expo-router";
+
+
 const songs = [
   { title: "Blinding Lights", uri: require('../assets/Songs/blinding_lights.mp3') },
   { title: "Revenge", uri: require('../assets/Songs/revenge.mp3') },
@@ -42,7 +50,23 @@ export default function SonglyPage() {
       console.error('Audio error:', e);
     }
   };
-
+  
+  const incrementSonglyStats = async () => {
+    const user = getAuth().currentUser;
+    if (!user) return;
+  
+    const ref = doc(db, 'users', user.uid);
+    try {
+      await updateDoc(ref, {
+        'songly.won': increment(1),
+        'songly.played': increment(1),
+      });
+    } catch (error) {
+      console.error('Failed to update Songly stats:', error);
+    }
+  };
+  
+  
   const handleGuessSubmit = () => {
     const isCorrect =
       guess.trim().toLowerCase() === currentSong.title.toLowerCase();
@@ -52,7 +76,8 @@ export default function SonglyPage() {
   
     if (isCorrect) {
       setShowCorrectPopup(true);
-  
+      incrementSonglyStats();
+
       setTimeout(() => {
         setShowCorrectPopup(false);
         moveToNextSong();
@@ -96,8 +121,23 @@ export default function SonglyPage() {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>SONGLY</Text>
+      <TouchableOpacity
+  style={{
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    padding:10,
+    backgroundColor: '#1DB954', 
+    borderRadius: 21,
+    zIndex: 100,
+  }}
+  onPress={() => router.back()}
+>
+  <Text style={{ color: 'white' }}>BACK</Text>
+</TouchableOpacity>
 
+      <Text style={styles.header}>SONGLY</Text>
+    
       <TouchableOpacity style={styles.playButton} onPress={handlePlay}>
         <FontAwesome name="play" size={40} color="#111" />
       </TouchableOpacity>
@@ -136,14 +176,6 @@ export default function SonglyPage() {
           </View>
         ))}
       </View>
-
-      <View style={styles.navBar}>
-        <Ionicons name="home-outline" size={26} color="#fff" />
-        <Ionicons name="search" size={26} color="#fff" />
-        <Ionicons name="add-circle-outline" size={26} color="#fff" />
-        <Ionicons name="game-controller-outline" size={26} color="#fff" />
-        <Ionicons name="person-outline" size={26} color="#fff" />
-      </View>
     </View>
   );
 }
@@ -156,6 +188,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingTop: 60,
   },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 10,
+    padding: 10,
+  },
+  
   header: {
     fontSize: 26,
     fontWeight: 'bold',
@@ -180,6 +220,7 @@ const styles = StyleSheet.create({
     color: '#aaa',
     marginTop: 10,
   },
+
   hintText: {
     color: '#fff',
     fontSize: 22,
@@ -205,13 +246,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   skipBtn: {
-    backgroundColor: '#ddd',
+    backgroundColor: '#1DB954',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
   },
   submitBtn: {
-    backgroundColor: '#aaaaff',
+    backgroundColor: '#1DB954',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -258,16 +299,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  
-  navBar: {
-    position: 'absolute',
-    bottom: 0,
-    height: 60,
-    width: '100%',
-    backgroundColor: '#222',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
   },
 });
