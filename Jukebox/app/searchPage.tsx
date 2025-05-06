@@ -8,10 +8,13 @@ import { SpotifyAlbumService, SpotifyAlbum } from '@/Services/SpotifyAlbumServic
 import { Linking } from 'react-native';
 import { searchUsers } from '@/Services/searchUsers';
 import { router, Stack } from 'expo-router';
+import FavoriteButton from '@/components/FavoriteButton';
+import { router, Stack } from 'expo-router';
 import { User } from '@/context/UserContext';
 
 type SearchCategory = 'Artists' | 'Songs' | 'Albums' | 'Users';
 const placeholderImage: any = require('@/assets/PFP/defaultPFP.jpeg');
+
 
 export default function SearchPage() {
   const [category, setCategory] = useState<SearchCategory>('Artists');
@@ -108,8 +111,12 @@ export default function SearchPage() {
 
   const renderItem = ({ item }: { item: SpotifyArtist | SpotifySong | SpotifyAlbum | User }) => {
     let imageUrl = null;
+
+  
+
     let title = '';
     let subtitle = '';
+
 
     if ('images' in item && item.images[0]) {
       imageUrl = item.images[0].url;
@@ -129,8 +136,48 @@ export default function SearchPage() {
       }
       title = item.username;
     }
-
+  
     return (
+
+      <Pressable
+        onPress={() => handleItemPress(item)}
+        style={({ pressed }) => [
+          styles.resultItem,
+          pressed && styles.resultItemPressed
+        ]}
+      >
+        {imageUrl && (
+          <Image
+            source={{ uri: imageUrl }}
+            style={[
+              styles.albumImage,
+              (category === 'Albums' || category === 'Songs') && styles.squareImage
+            ]}
+          />
+        )}
+  
+        {/* Text + Favorite button in a row */}
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.spotifyItemName}>{item.name}</Text>
+            {'artists' in item && (
+              <Text style={styles.spotifyItemDetails}>
+                {item.artists.map(a => a.name).join(', ')}
+              </Text>
+            )}
+          </View>
+  
+          <FavoriteButton
+            id={item.id}
+            type={
+              'album' in item ? 'album' :
+              'artists' in item ? 'track' :
+              'artist'
+            }
+          />
+        </View>
+      </Pressable>
+
       <Pressable 
       onPress={() => handleItemPress(item)}
       style={({ pressed }) => [
@@ -154,8 +201,10 @@ export default function SearchPage() {
         ) : null}
       </View>
     </Pressable>
+
     );
   };
+  
 
   return (
     <View style={styles.container}>
@@ -165,7 +214,6 @@ export default function SearchPage() {
         <WeatherButton onPress={handleWeatherPress} />
       </View>
 
-      {/* Category Buttons */}
       <View style={styles.buttonGroup}>
         {categories.map((cat) => (
           <Pressable
@@ -178,10 +226,8 @@ export default function SearchPage() {
         ))}
       </View>
 
-      
       <SearchBar onSearch={handleSearch} selectedCategory={category} />
 
-    
       <Text style={styles.resultsTitle}>Results in {category}:</Text>
       {isLoading ? (
         <Text style={styles.loadingText}>Loading...</Text>
@@ -277,3 +323,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
 });
+
+
