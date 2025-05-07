@@ -2,35 +2,44 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-const UserPost = () => {
-  const [likes, setLikes] = useState(0);
+interface Post {
+  postID: string;
+  content: string;
+  createdAt: Date;
+  userID: string;
+  likes: number;
+  comments: any[];
+}
+
+interface UserPostProps {
+  post: Post;
+  onLike: (postID: string) => void;
+  onComment: (postID: string) => void;
+  onProfilePress: (userID: string) => void;
+}
+
+const UserPost: React.FC<UserPostProps> = ({ post, onLike, onComment, onProfilePress }) => {
   const [liked, setLiked] = useState(false);
 
   const handleLike = () => {
     setLiked(!liked);
-    setLikes(liked ? likes - 1 : likes + 1);
-  };
-
-  const handleProfilePress = () => {
-    console.log('Profile pressed');
+    onLike(post.postID);
   };
 
   const handleCommentPress = () => {
-    console.log('Comment button pressed');
+    onComment(post.postID);
   };
 
-  const handleAddToLibrary = () => {
-    console.log('Added to library');
+  const handleProfilePress = () => {
+    onProfilePress(post.userID);
   };
 
-  const handlePlayPress = () => {
-    console.log('Play button pressed');
-  };
-
-  const album = {
-    title: "Random Access Memories",
-    artist: "Daft Punk",
-    cover: "https://upload.wikimedia.org/wikipedia/en/2/26/Daft_Punk_-_Random_Access_Memories.png?20230908180703"
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
   };
 
   return (
@@ -42,12 +51,15 @@ const UserPost = () => {
             style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} 
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleProfilePress}>
-          <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'white' }}>Username</Text>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity onPress={handleProfilePress}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'white' }}>User {post.userID}</Text>
+          </TouchableOpacity>
+          <Text style={{ fontSize: 12, color: 'gray' }}>{formatDate(post.createdAt)}</Text>
+        </View>
       </View>
       
-      <View style={{ backgroundColor: 'black', padding: 10, borderRadius: 10, borderColor: 'grey', borderWidth: .5, flexDirection: 'row', alignItems: 'center', marginBottom: 10, position: 'relative' }}>
+      {/* <View style={{ backgroundColor: 'black', padding: 10, borderRadius: 10, borderColor: 'grey', borderWidth: .5, flexDirection: 'row', alignItems: 'center', marginBottom: 10, position: 'relative' }}>
         <Image 
           source={{ uri: album.cover }} 
           style={{ width: 80, height: 80, borderRadius: 10, marginRight: 10, resizeMode: 'contain' }} 
@@ -59,23 +71,23 @@ const UserPost = () => {
         <TouchableOpacity onPress={handlePlayPress} style={{ position: 'absolute', bottom: 10, right: 10 }}>
           <FontAwesome name="play" size={24} color="white" />
         </TouchableOpacity>
-      </View>
+      </View> */}
+      <Text style={{ fontSize: 14, marginBottom: 10, color: 'white' }}>{post.content}</Text>
       
-      <Text style={{ fontSize: 14, marginBottom: 10, color: 'white' }}>This is a placeholder for the post description. It can be multiple lines long.</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity onPress={handleLike} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
             <FontAwesome name={liked ? 'heart' : 'heart-o'} size={20} color={liked ? 'red' : 'white'} />
-            <Text style={{ marginLeft: 5, color: 'white' }}>{likes}</Text>
+            <Text style={{ marginLeft: 5, color: 'white' }}>{post.likes}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCommentPress} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
             <FontAwesome name="comment-o" size={20} color="white" />
-            <Text style={{ marginLeft: 5, color: 'white' }}>0</Text>
+            <Text style={{ marginLeft: 5, color: 'white' }}>{post.comments.length}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={handleAddToLibrary}>
+        {/* <TouchableOpacity onPress={handleAddToLibrary}>
           <FontAwesome name="plus" size={20} color="white" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
