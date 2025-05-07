@@ -7,10 +7,13 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "assets": ["./assets/fonts/"],
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
+
+    
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
