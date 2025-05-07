@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute', 
-    bottom: 0, 
+    bottom: scale(0), 
     width: '100%', 
   },
   buttons: {
