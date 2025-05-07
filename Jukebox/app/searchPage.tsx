@@ -9,7 +9,6 @@ import { Linking } from 'react-native';
 import { searchUsers } from '@/Services/searchUsers';
 import { router, Stack } from 'expo-router';
 import FavoriteButton from '@/components/FavoriteButton';
-import { router, Stack } from 'expo-router';
 import { User } from '@/context/UserContext';
 
 type SearchCategory = 'Artists' | 'Songs' | 'Albums' | 'Users';
@@ -148,7 +147,7 @@ export default function SearchPage() {
       >
         {imageUrl && (
           <Image
-            source={{ uri: imageUrl }}
+            source={imageUrl}
             style={[
               styles.albumImage,
               (category === 'Albums' || category === 'Songs') && styles.squareImage
@@ -159,12 +158,10 @@ export default function SearchPage() {
         {/* Text + Favorite button in a row */}
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.spotifyItemName}>{item.name}</Text>
-            {'artists' in item && (
-              <Text style={styles.spotifyItemDetails}>
-                {item.artists.map(a => a.name).join(', ')}
-              </Text>
-            )}
+            <Text style={styles.spotifyItemName}>{title}</Text>
+            {subtitle ? (
+              <Text style={styles.spotifyItemDetails}>{subtitle}</Text>
+            ) : null}
           </View>
   
           <FavoriteButton
@@ -177,31 +174,6 @@ export default function SearchPage() {
           />
         </View>
       </Pressable>
-
-      <Pressable 
-      onPress={() => handleItemPress(item)}
-      style={({ pressed }) => [
-        styles.resultItem,
-        pressed && styles.resultItemPressed
-      ]}
-    >
-      {imageUrl ? (
-        <Image 
-          source={imageUrl}
-          style={[
-            styles.albumImage,
-            (category === 'Albums' || category === 'Songs') && styles.squareImage
-          ]}
-        />
-      ) : null}
-      <View style={styles.spotifyItemInfo}>
-        <Text style={styles.spotifyItemName}>{title}</Text>
-        {subtitle ? (
-          <Text style={styles.spotifyItemDetails}>{subtitle}</Text>
-        ) : null}
-      </View>
-    </Pressable>
-
     );
   };
   
