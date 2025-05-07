@@ -43,7 +43,7 @@ Describe how the commands and process to launch the project on the main branch i
 
 1. Create a folder to store the project and enter it. Then, in the terminal type:
 ```sh
-git pull https://github.com/CSC-3380-Spring-2025/Team-5.git
+git clone https://github.com/CSC-3380-Spring-2025/Team-5.git
 ```
 2. Navigate to the Jukebox Directory, then install all dependencies through Node Package Manager:
 ```sh
