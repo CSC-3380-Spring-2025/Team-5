@@ -1,10 +1,10 @@
 # [VibeSync] : [Team 5]
-# Aidan McNamara, Caleb Zeringue, Mason Bourgeois, Darrion Paul, Sergio Zuniga
+# Aidan McNamara, Caleb Zeringue, Mason Bourgeois, Darrion Paul, Sergio Zuniga, Behrens Richeson 
 Project Manager: [Mason] ([GitHub Name])\
 Communications Lead: [Sergio] ([GitHub Name])\
 Git Master: [Darrion] ([GitHub Name])\
 Design Lead: [Caleb] ([GitHub Name])\
-Quality Assurance Tester: [Aidan] ([aidanMCNAM])
+Quality Assurance Tester: [Aidan] ([aidanMCNAM])/ [Behr] 
 
 # About Our Software
 
