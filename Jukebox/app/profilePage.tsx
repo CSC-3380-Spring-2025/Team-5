@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Modal } from 'react-native'; 
 import { Link, Stack } from 'expo-router';
 import { scale } from 'react-native-size-matters';
 import { StyleSheet } from 'react-native';
@@ -12,16 +12,74 @@ import Line from '@/components/HorizontalLine';
 import { useEffect, useState } from 'react';
 import ProfilePicture from '@/components/ProfilePicture';
 import {getAuth, updateProfile} from 'firebase/auth';
-
-
-
-
-
+import { useUser } from '@/context/UserContext';
+import { db } from '@/config/firebase';
+import { doc, updateDoc } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
 
 
 export default function ProfilePage() {
 const [showModal, setShowModal] = useState(false);
-const [profilePicture, setProfilePicture] = useState('pfp.jpeg');
+const [profilePicture, setProfilePicture] = useState('defualtPFP.jpeg');
+const { user, setUser } = useUser();
+const [showBio, setShowBio] = useState(false);
+const [editingBio, setEditingBio] = useState(false);
+const [bioText, setBioText] = useState(user?.bio || '');
+const [featuredSongs, setFeaturedSongs] = useState<FeaturedItem[]>([]);
+const [featuredAlbums, setFeaturedAlbums] = useState<FeaturedItem[]>([]);
+const [featuredArtists, setFeaturedArtists] = useState<FeaturedItem[]>([]);
+
+
+
+type FeaturedItem = {
+  id: string;
+  image: string;
+};
+
+
+useEffect(() => {
+  if (user?.bio) {
+    setBioText(user.bio);
+  }
+}, [user?.bio]);
+useEffect(() => {
+  const fetchFeaturedMedia = async () => {
+    if (!user?.userId) return;
+
+    try {
+      const userRef = doc(db, 'users', user.userId);
+      const docSnap = await getDoc(userRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setFeaturedSongs((data.featuredSongs || []).slice(0, 4));
+        setFeaturedArtists((data.featuredArtists || []).slice(0, 4));
+        setFeaturedAlbums((data.featuredAlbums || []).slice(0, 4));
+      }
+    } catch (error) {
+      console.error('Error fetching featured media:', error);
+    }
+  };
+
+  fetchFeaturedMedia();
+}, [user?.userId]);
+
+const handleSaveBio = async () => {
+  if (!user) return;
+
+  try {
+    const userRef = doc(db, 'users', user.userId);
+    await updateDoc(userRef, { bio: bioText });
+
+    
+    setUser({ ...user, bio: bioText });
+    setEditingBio(false);
+  } catch (error) {
+    console.error('Error saving bio:', error);
+  }
+};
+
+
 useEffect(() => {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -36,50 +94,143 @@ const imageMap: { [key: string]: any } = {
   'pfp2.jpeg': require('@/assets/PFP/pfp2.jpeg'),
   'pfp3.jpeg': require('@/assets/PFP/pfp3.jpeg'),
   'pfp4.jpeg': require('@/assets/PFP/pfp4.jpeg'),
-  'pfp.jpeg': require('@/assets/PFP/pfp.jpeg'), 
+  'pfp.jpeg': require('@/assets/PFP/defaultPFP.jpeg'), 
 };
 
 
 
   return (
     <>
-      <Stack.Screen options={{ title: "Username" }} />
+      <Stack.Screen options={{ title: `Welcome ${user?.username || ''}` }} />
       <View style={styles.container}>
-        {/*Following / Followers*/}
+        {}
         <View style={styles.textRow}>
           <Text style={styles.textF}>Followers</Text>
           <Text style={styles.textF}>Following</Text>
       </View>
 
-      {/* Following # / Followers # */}
+      {}
         <View style={styles.numberRow}>
-          <Text style={styles.number}>1.2m</Text>
-          <Text style={styles.number}>5</Text>
+        <Text style={styles.number}>{user?.followers?.length || 0}</Text> 
+        <Text style={styles.number}>{user?.following?.length || 0}</Text>
         </View>
 
-      {/* Bio Text Box */}
+      {}
       <View style={styles.bioContainer}>
-        <Text style={styles.bioText}>
-          This is a sample bio. It is centered and limited to 100 characters.
-        </Text>
-      </View>
+  {editingBio ? (
+    <>
+      <TextInput
+        style={styles.bioText}
+        value={bioText}
+        onChangeText={setBioText}
+        placeholder="Write something about yourself"
+        placeholderTextColor="#888"
+      />
+      <TouchableOpacity onPress={handleSaveBio}>
+        <Text style={{ color: 'white', marginTop: 10 }}>Save</Text>
+      </TouchableOpacity>
+    </>
+  ) : (
+    <>
+      <Text style={styles.bioText}>
+        {user?.bio
+          ? user.bio.length > 10
+            ? user.bio.substring(0, 5) + '...'
+            : user.bio
+          : 'No bio yet.'}
+      </Text>
+
+      {(user?.bio?.length ?? 0) > 10 && ( 
+        <TouchableOpacity onPress={() => setShowBio(true)}> 
+          <Text style={{ color: '#aaa', fontSize: 14, marginTop: 5 }}> 
+            Show more 
+          </Text> 
+        </TouchableOpacity> 
+      )} 
+     {getAuth().currentUser?.uid === user?.userId && ( 
+  <TouchableOpacity onPress={() => {
+    setEditingBio(true); 
+    setShowBio(true);             
+  }}>
+    <Text style={{ color: 'white', marginTop: 10 }}>Edit Bio</Text>
+  </TouchableOpacity>
+)}
+
+    </>
+  )}
+</View>
+<Modal
+  visible={showBio}
+  transparent
+  animationType="slide"
+  onRequestClose={() => {
+    setShowBio(false);
+    setEditingBio(false);
+  }}
+>
+  <View style={styles.modalBackground}>
+    <View style={styles.bioModalBox}>
+      {editingBio ? (
+        <>
+          <Text style={styles.fullBioText}>Edit your bio</Text>
+
+          <TextInput
+            style={styles.bioInput}
+            value={bioText}
+            onChangeText={(text) => {
+              if (text.length <= 100) setBioText(text);
+            }}
+            placeholder="Write something about yourself"
+            placeholderTextColor="#888"
+            multiline
+            maxLength={100}
+          />
+
+          <Text style={{ color: '#ccc', fontSize: 12 }}>{bioText.length}/100</Text>
+
+          <TouchableOpacity onPress={handleSaveBio}>
+            <Text style={styles.closeModal}>Save</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              setShowBio(false);
+              setEditingBio(false);
+            }}
+          >
+            <Text style={[styles.closeModal, { color: '#888' }]}>Cancel</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <Text style={styles.fullBioText}>{user?.bio || 'No bio yet.'}</Text>
+          <TouchableOpacity onPress={() => setShowBio(false)}>
+            <Text style={styles.closeModal}>Close</Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
+  </View>
+</Modal>
 
 
 
-      {/*Rank Category*/}
+
+
+
+      {}
       <View style={styles.textColumn}>
         <Text style={styles.textTitle}>Songs</Text>
         <Text style={styles.textTitle}>Artists</Text>
         <Text style={styles.textTitle}>Albums</Text>
       </View>
 
-        {/* Profile Picture */}
-        
+        {/* Profile Picture */}     
        <View style={styles.profilePictureContainer}>
         <TouchableOpacity onPress={() => setShowModal(true)}>
           <View style={styles.profilePicture}>
             <Image
-                source={imageMap[profilePicture] || imageMap['pfp.jpeg']}
+                source={imageMap[profilePicture] || imageMap['defaultPFP.jpeg']}
                 style={styles.profileImage}
             />
           </View>
@@ -90,7 +241,7 @@ const imageMap: { [key: string]: any } = {
 
 
         
-        {/* Lines */}
+        {}
         <View style={styles.linecontainer}>
           <Line />
           <View style={styles.lines} />
@@ -101,91 +252,33 @@ const imageMap: { [key: string]: any } = {
           <Line />
         </View>
 
-        {/* Rectangles with Albums */}
+        {}
         <View style={styles.rectangleRow2}>
-          <View style={styles.rectangleGolden}>
-            <Image
-              source={require('@/assets/r21.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangleSilver}>
-            <Image
-              source={require('@/assets/r22.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangleBronze}>
-            <Image
-              source={require('@/assets/r23.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangle}>
-            <Image
-              source={require('@/assets/r24.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-        </View>
+  {featuredAlbums.map((album, index) => (
+    <View key={index} style={styles.rectangle}>
+      <Image source={{ uri: album.image }} style={styles.rankImage} />
+    </View>
+  ))}
+</View>
 
-        {/* Rectangles with Images */}
-        <View style={styles.rectangleRow}>
-          <View style={styles.rectangleGolden}>
-            <Image
-              source={require('@/assets/Top4Songs/r1.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangleSilver}>
-            <Image
-              source={require('@/assets/Top4Songs/r2.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangleBronze}>
-            <Image
-              source={require('@/assets/Top4Songs/r3.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.rectangle}>
-            <Image
-              source={require('@/assets/Top4Songs/r4.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-        </View>
+<View style={styles.rectangleRow}>
+  {featuredSongs.map((song, index) => (
+    <View key={index} style={styles.rectangle}>
+      <Image source={{ uri: song.image }} style={styles.rankImage} />
+    </View>
+  ))}
+</View>
 
-        {/* Circles with Images */}
-        <View style={styles.circleRow}>
-          <View style={styles.circleGolden}>
-            <Image
-              source={require('@/assets/Top4Artists/c1.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.circleSilver}>
-            <Image
-              source={require('@/assets/Top4Artists/c2.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.circleBronze}>
-            <Image
-              source={require('@/assets/Top4Artists/c3.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-          <View style={styles.circle}>
-            <Image
-              source={require('@/assets/Top4Artists/c4.jpeg')}
-              style={styles.rankImage}
-            />
-          </View>
-        </View>
+<View style={styles.circleRow}>
+  {featuredArtists.map((artist, index) => (
+    <View key={index} style={styles.circle}>
+      <Image source={{ uri: artist.image }} style={styles.rankImage} />
+    </View>
+  ))}
+</View>
 
-        {/* Buttons */}
+
+     
         <View style={styles.buttonContainer}>
           <View style={styles.buttons}>
             <Link href="/List" asChild>
@@ -214,14 +307,14 @@ const imageMap: { [key: string]: any } = {
   visible={showModal}
   onClose={() => setShowModal(false)}
   onSave={async (filename) => {
-      setProfilePicture(filename); // update image in UI
+      setProfilePicture(filename); 
     
       const auth = getAuth();
       const user = auth.currentUser;
     
       if (user) {
         await updateProfile(user, {
-          photoURL: filename, // save to Firebase
+          photoURL: filename, 
         });
       }
     
@@ -237,26 +330,26 @@ const imageMap: { [key: string]: any } = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#808080',
+    backgroundColor: '#000000',
   },
   buttonContainer: {
-    position: 'absolute', // Position the buttons absolutely
-    bottom: 0, // Stick to the bottom
-    width: '100%', // Full width
+    position: 'absolute', 
+    bottom: scale(0), 
+    width: '100%', 
   },
   buttons: {
-    flexDirection: 'row', // Arrange buttons in a row
-    justifyContent: 'space-around', // Add equal spacing around buttons
-    alignItems: 'center', // Center buttons vertically
-    paddingBottom: scale(40), // Add padding at the bottom
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    alignItems: 'center', 
+    paddingBottom: scale(65), 
   },
   linecontainer: {
-    position: 'absolute', // Position the lines absolutely
-    top: scale(210), // Adjust this value to move lines up or down
-    width: '100%', // Ensure the container spans the full width
+    position: 'absolute', 
+    top: scale(210), 
+    width: '100%', 
   },
   lines: {
-    height: scale(105), // Space between lines
+    height: scale(105), 
   },
   profilePictureContainer: {
     alignItems: 'center',
@@ -266,7 +359,7 @@ const styles = StyleSheet.create({
   profilePicture: {
     position: 'absolute',
     width: scale(119),
-    height: scale(119),
+    height: scale(110),
     borderRadius: scale(119 / 2),
     overflow: 'hidden',
     borderWidth: scale(2),
@@ -277,145 +370,185 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
   },
+
+  modalBackground: { 
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bioModalBox: { 
+    backgroundColor: '#1e1e1e',
+    padding: scale(30),
+    borderRadius: scale(12),
+    width: '80%',
+    alignItems: 'center',
+  },
+  fullBioText: { 
+    fontSize: scale(16),
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: scale(20),
+  },
+  closeModal: { 
+    color: '#B57EDC',
+    fontWeight: 'bold',
+    marginTop: scale(10),
+  },
+  
   bioContainer: {
     position: 'absolute',
-    alignItems: 'center', // Center horizontally
-    marginTop: scale(160), // Adjust spacing as needed
-    paddingHorizontal: scale(20), // Add padding to prevent text from touching edges
+    alignItems: 'center', 
+    marginTop: scale(149), 
+    width: '85%',
+    paddingHorizontal: scale(20), 
     marginLeft: scale(30),
+    
   },
+  bioInput: {
+    backgroundColor: '#222',
+    color: '#fff',
+    padding: scale(12),
+    borderRadius: scale(8),
+    fontSize: scale(15),
+    width: '100%',
+    minHeight: scale(80),
+    textAlignVertical: 'top',
+    marginBottom: scale(10),
+  },
+  
   bioText: {
-    fontSize: scale(15), // Font size 20
-    color: '#FFFFFF', // White text color
-    textAlign: 'center', // Center text horizontally
-    maxWidth: scale(300), // Limit width to prevent overflow
+    fontSize: scale(15), 
+    color: '#FFFFFF', 
+    textAlign: 'center', 
+    maxWidth: scale(300), 
   },
   textRow: {
-    flexDirection: 'row', // Arrange text elements horizontally
-    justifyContent: 'center', // Add space between text elements
-    width: scale(350), // DONT CHANGE
+    flexDirection: 'row', 
+    justifyContent: 'center', 
+    width: scale(350), 
   },
   textF: {
-    fontSize: 20,
+    fontSize: scale(20),
     color: '#FFFFFF',
-    marginHorizontal: scale(80), // Add horizontal spacing
-    marginTop: scale(115), // DONT CHANGE
+    marginHorizontal: scale(80), 
+    marginTop: scale(115), 
   },
   textColumn: {
     marginLeft: scale(0),
-    marginTop: scale(55), // Add vertical spacing
+    marginTop: scale(55), 
   },
   textTitle: {
-    fontSize: 15,
+    fontSize: scale(15),
     color: '#FFFFFF',
-    height: scale(107), // DONT CHANGE
+    height: scale(107), 
   },
   numberRow: {
-    flexDirection: 'row', // Arrange numbers horizontally
-    marginLeft: scale(-66), // Move the entire row to the left
+    flexDirection: 'row', 
+    marginLeft: scale(-66), 
   },
   number: {
-    fontSize: 20,
+    fontSize: scale(20),
     color: '#FFFFFF',
-    marginTop: scale(0), // Adjust vertical spacing if needed
+    marginTop: scale(0), 
     marginHorizontal: scale(106),
   },
   rectangleRow: {
-    flexDirection: 'row', // Arrange rectangles horizontally
-    justifyContent: 'space-between', // Add space between rectangles
-    paddingHorizontal: 30, // Add padding on the sides
-    marginTop: scale(-295), // Adjust this value to position the row
-    marginLeft: scale(17), // Move the entire row to the right
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: scale(30), 
+    marginTop: scale(-295), 
+    marginLeft: scale(17), 
   },
   rectangleRow2: {
-    flexDirection: 'row', // Arrange rectangles horizontally
-    justifyContent: 'space-between', // Add space between rectangles
-    paddingHorizontal: 30, // Add padding on the sides
-    marginTop: scale(410), // Adjust this value to position the row
-    marginLeft: scale(17), // Move the entire row to the right
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: scale(30), 
+    marginTop: scale(410), 
+    marginLeft: scale(17), 
   },
   rectangle: {
-    width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: 5,
+    width: scale(70) - 4, 
+    height: scale(85) - 4, 
+    borderRadius: scale(5),
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'transparent', // Golden border color
-    marginRight: scale(8), // Keep the same spacing
+    borderWidth: scale(3), 
+    borderColor: 'transparent', 
+    marginRight: scale(8),
   },
   rectangleGolden: {
-    width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: 5,
+    width: scale(70) - 4, 
+    height: scale(85) - 4, 
+    borderRadius: scale(5),
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'gold', // Golden border color
-    marginRight: scale(8), // Keep the same spacing
+    borderWidth: scale(3), 
+    borderColor: 'gold', 
+    marginRight: scale(8), 
   },
   rankImage: {
-    width: '100%', // Fill the rectangle width
-    height: '100%', // Fill the rectangle height
-    resizeMode: 'cover', // Ensure the image covers the rectangle without distortion
+    width: '100%',
+    height: '100%', 
+    resizeMode: 'cover', 
   },
   rectangleSilver: {
-    width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: 5,
+    width: scale(70) - 4, 
+    height: scale(85) - 4, 
+    borderRadius: scale(5),
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'silver', // Golden border color
-    marginRight: scale(8), // Keep the same spacing
+    borderWidth: scale(3), 
+    borderColor: 'silver', 
+    marginRight: scale(8), 
   },
   rectangleBronze: {
-    width: scale(70) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(85) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: 5,
+    width: scale(70) - 4, 
+    height: scale(85) - 4, 
+    borderRadius: scale(5),
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: '#9E7015', // Golden border color
-    marginRight: scale(8), // Keep the same spacing
+    borderWidth: scale(3), 
+    borderColor: '#9E7015',
+    marginRight: scale(8), 
   },
   circleRow: {
-    flexDirection: 'row', // Arrange rectangles horizontally
-    justifyContent: 'space-between', // Add space between rectangles
-    paddingHorizontal: 30, // Add padding on the sides
-    marginTop: scale(32), // Adjust this value to position the row
-    marginLeft: scale(10), // Move the entire row to the right
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: scale(30), 
+    marginTop: scale(32), 
+    marginLeft: scale(10), 
   },
   circle: {
-    width: scale(76) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(76) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: scale(76 / 2), // Half of width/height to make it a circle
+    width: scale(76) - 4, 
+    height: scale(76) - 4, 
+    borderRadius: scale(76 / 2), 
     overflow: 'hidden',
-    borderWidth: 0, // Add a border
-    borderColor: 'transparent', // Golden border color
-    marginRight: scale(3), // Keep the same spacing
+    borderWidth: 0,
+    borderColor: 'transparent', 
+    marginRight: scale(3), 
   },
   circleGolden: {
-    width: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: scale(78 / 2), // Half of width/height to make it a circle
+    width: scale(78) - 4, 
+    height: scale(78) - 4, 
+    borderRadius: scale(78 / 2), 
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'gold', // Golden border color
-    marginRight: scale(3), // Keep the same spacing
+    borderWidth: scale(3), 
+    borderColor: 'gold', 
+    marginRight: scale(3), 
   },
   circleSilver: {
-    width: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: scale(78 / 2), // Half of width/height to make it a circle
+    width: scale(78) - 4, 
+    height: scale(78) - 4, 
+    borderRadius: scale(78 / 2),
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: 'silver', // Golden border color
-    marginRight: scale(3), // Keep the same spacing
+    borderWidth: scale(3), 
+    borderColor: 'silver', 
+    marginRight: scale(3), 
   },
   circleBronze: {
-    width: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    height: scale(78) - 4, // Subtract borderWidth * 2 (2 on each side)
-    borderRadius: scale(78 / 2), // Half of width/height to make it a circle
+    width: scale(78) - 4, 
+    height: scale(78) - 4, 
+    borderRadius: scale(78 / 2), 
     overflow: 'hidden',
-    borderWidth: 3, // Add a border
-    borderColor: '#9E7015', // Golden border color
-    marginRight: scale(3), // Keep the same spacing
+    borderWidth: scale(3), 
+    borderColor: '#9E7015', 
+    marginRight: scale(3),
   },
 });

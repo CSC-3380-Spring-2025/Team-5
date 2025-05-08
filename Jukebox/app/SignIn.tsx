@@ -1,10 +1,13 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 
 export default function SignIn() {
   return (
+    
     <View style={styles.container}>
+      <Stack.Screen options={{ title: "" }} />
+      <Text style={styles.title}>Welcome to Jukebox!</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
           style={styles.signUpButton}
@@ -12,15 +15,7 @@ export default function SignIn() {
         >
           <Text style={styles.signUpButtonText}>Sign Up Free</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.googleButton}>
-          <Image 
-            source={require('@/assets/images/googlelogo.webp')}
-            style={styles.googleLogo}
-          />
-          <Text style={styles.googleButtonText}>Continue with Google</Text>
-        </TouchableOpacity>
-        
+
         <TouchableOpacity onPress={() => router.push('/LoginPage')}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
@@ -35,6 +30,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title: {
+    color: 'white',
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 32,
   },
   buttonContainer: {
     alignItems: 'center',
@@ -56,32 +57,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-  },
-  googleButton: {
-    width: 256,
-    paddingVertical: 12,
-    backgroundColor: 'black',
-    borderWidth: 1,
-    borderColor: '#666',
-    borderRadius: 25,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  googleLogo: {
-    width: 20,
-    height: 20,
-  },
-  googleButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   loginText: {
     color: 'white',

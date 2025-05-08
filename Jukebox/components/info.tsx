@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-// This component is used to display information about an album or a song.
-
 interface InfoProps {
   type: 'album' | 'song';
   data: {
@@ -25,7 +23,6 @@ const Info: React.FC<InfoProps> = ({ type, data }) => {
                 Artists: <Text style={styles.infoTextBold}>{data.artists?.join(', ')}</Text>
             </Text>
 
-            {/* Album specific info */}
             {type === 'album' && (
                 <>
                     <Text style={styles.infoText}>
@@ -37,7 +34,6 @@ const Info: React.FC<InfoProps> = ({ type, data }) => {
                 </>
             )}
 
-            {/* Song specific info */}
             {type === 'song' && (
                 <>
                     <Text style={styles.infoText}>
@@ -83,7 +79,6 @@ const styles = StyleSheet.create({
         color: 'white',
         paddingBottom: 5,
         fontSize: 16,
-        // fontWeight: 'bold', still deciding if I want this bold or not
     }
 });
 

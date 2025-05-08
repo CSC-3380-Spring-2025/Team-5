@@ -11,9 +11,15 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
+      ,"infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
     },
+    
 
     
+    
+
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { getAuth } from 'firebase/auth';
+import { doc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '@/config/firebase';
+import { router } from "expo-router";
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+
 
 interface Album {
   id: number;
@@ -35,21 +41,21 @@ const albums: Album[] = [
   },
   {
     id: 5,
-    name: "The Blueprint",
-    artist: "JAY-Z",
-    imageUrl: "https://i.scdn.co/image/ab67616d0000b27398d38d8b36bae76de54e15a3"
+    name: "Graduation",
+    artist: "Kanye",
+    imageUrl: "https://i.scdn.co/image/ab67616d0000b273675561f3defd1d5a551936a8"
   },
   {
     id: 6,
-    name: "Back in Black",
-    artist: "AC/DC",
-    imageUrl: "https://i.scdn.co/image/ab67616d0000b273fd967a32c6cabd2981346fc7"
+    name: "Currents",
+    artist: "Tame Impala",
+    imageUrl: "https://i.scdn.co/image/ab67616d0000b2739e1cfc756886ac782e363d79"
   },
   {
     id: 7,
-    name: "The Joshua Tree",
-    artist: "U2",
-    imageUrl: "https://i.scdn.co/image/ab67616d00001e02f8996a3f97e80d9d700635c3"
+    name: "Take Care",
+    artist: "Drake",
+    imageUrl: "https://i.scdn.co/image/ab67616d0000b273ac0c2daf1867b0d86cca74be"
   },
   {
     id: 8,
@@ -71,6 +77,20 @@ const albums: Album[] = [
   }
 ];
 
+const incrementAlbumlyStats = async () => {
+    const user = getAuth().currentUser;
+    if (!user) return;
+  
+    const ref = doc(db, 'users', user.uid);
+    try {
+      await updateDoc(ref, {
+        'albumly.won': increment(1),
+        'albumly.played': increment(1),
+      });
+    } catch (error) {
+      console.error('Failed to update albumly stats:', error);
+    }
+  };
 export default function AlbumGuessingGame() {
   const [guess, setGuess] = useState('');
   const [triesLeft, setTriesLeft] = useState(5);
@@ -80,7 +100,7 @@ export default function AlbumGuessingGame() {
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   
-  // Initialize game with random album
+ 
   useEffect(() => {
     startNewGame();
   }, []);
@@ -107,18 +127,19 @@ export default function AlbumGuessingGame() {
   };
 
   const handleSubmit = () => {
-    if (!currentAlbum || !guess.trim()) return; // Don't proceed if input is empty
+    if (!currentAlbum || !guess.trim()) return; 
     
     if (guess.toLowerCase() === currentAlbum.name.toLowerCase()) {
       setGameStatus('won');
+      incrementAlbumlyStats();
     } else {
-      useTry(); // Only consume try if answer is wrong and not empty
+      useTry(); 
     }
   };
 
   const handleSkip = () => {
-    useTry(); // Consumes a try but stays on same album
-    setGuess(''); // Clear the input field
+    useTry(); 
+    setGuess('');
   };
   const handleImageLoad = () => {
     setImageLoading(false);
@@ -132,9 +153,24 @@ export default function AlbumGuessingGame() {
 
   return (
     <View style={styles.container}>
+        <TouchableOpacity
+        style={{
+          position: 'absolute',
+          top: 50,
+          left: 20,
+          padding:10,
+          backgroundColor: '#1DB954', 
+          borderRadius:20,
+          zIndex: 100,
+        }}
+        onPress={() => router.back()}
+      >
+        <Text style={{ color: 'white' }}>BACK</Text>
+      </TouchableOpacity>
       {currentAlbum && (
         <>
-          {/* Album Art Display */}
+
+          {}
           <View style={styles.albumArtContainer}>
             {imageLoading && (
               <ActivityIndicator size="large" color="#1DB954" style={styles.loader} />
@@ -147,7 +183,7 @@ export default function AlbumGuessingGame() {
             ) : (
               <Image 
                 source={{ uri: currentAlbum.imageUrl }}
-                blurRadius={gameStatus !== 'playing' ? 0 : blurLevel} // Unblur when game ends
+                blurRadius={gameStatus !== 'playing' ? 0 : blurLevel} 
                 style={[styles.albumArt, imageLoading && styles.hidden]}
                 resizeMode="cover"
                 onLoad={handleImageLoad}
@@ -156,7 +192,7 @@ export default function AlbumGuessingGame() {
             )}
           </View>
 
-          {/* Game Status */}
+          {}
           {gameStatus !== 'playing' && (
             <View style={styles.answerContainer}>
               <Text style={styles.answerTitle}>
@@ -167,7 +203,7 @@ export default function AlbumGuessingGame() {
             </View>
           )}
 
-          {/* Guess Input */}
+          {}
           <TextInput
             style={styles.input}
             placeholder="Enter album name..."
@@ -175,10 +211,10 @@ export default function AlbumGuessingGame() {
             value={guess}
             onChangeText={setGuess}
             editable={gameStatus === 'playing'}
-            onSubmitEditing={() => guess.trim() && handleSubmit()} // Only submit if not empty          
+            onSubmitEditing={() => guess.trim() && handleSubmit()}        
             />
           
-          {/* Action Buttons */}
+          {}
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={[styles.button, triesLeft === 0 && styles.disabledButton]} 
@@ -196,10 +232,10 @@ export default function AlbumGuessingGame() {
             </TouchableOpacity>
           </View>
           
-          {/* Tries Counter */}
+          {}
           <Text style={styles.triesText}>Tries Left: {triesLeft}</Text>
           
-          {/* New Game Button */}
+          {}
           {gameStatus !== 'playing' && (
             <TouchableOpacity style={styles.newGameButton} onPress={startNewGame}>
               <Text style={styles.buttonText}>New Album</Text>
