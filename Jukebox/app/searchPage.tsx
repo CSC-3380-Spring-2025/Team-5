@@ -10,6 +10,7 @@ import { searchUsers } from '@/Services/searchUsers';
 import { router, Stack } from 'expo-router';
 import FavoriteButton from '@/components/FavoriteButton';
 import { User } from '@/context/UserContext';
+
 import { saveArtistRating } from '@/firebase/saveRating';
 import { saveSongRating, saveAlbumRating } from '@/firebase/saveSongAndAlbumRating';
 import RatingPopup from '@/components/rateComponent';
@@ -17,9 +18,11 @@ import RatingPopup from '@/components/rateComponent';
 
 
 
+import FollowButton from '../components/FollowButton';
+
+
 type SearchCategory = 'Artists' | 'Songs' | 'Albums' | 'Users';
 const placeholderImage: any = require('@/assets/PFP/defaultPFP.jpeg');
-
 
 export default function SearchPage() {
   const [category, setCategory] = useState<SearchCategory>('Artists');
@@ -194,7 +197,7 @@ export default function SearchPage() {
           />
         )}
   
-        {/* Text + Favorite button in a row */}
+        {/* Text + Favorite/Follow button in a row */}
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flex: 1 }}>
             <Text style={styles.spotifyItemName}>{title}</Text>
@@ -203,14 +206,18 @@ export default function SearchPage() {
             ) : null}
           </View>
   
-          <FavoriteButton
-            id={item.id}
-            type={
-              'album' in item ? 'album' :
-              'artists' in item ? 'track' :
-              'artist'
-            }
-          />
+          {'username' in item ? (
+            <FollowButton userId={item.id} />
+          ) : (
+            <FavoriteButton
+              id={item.id}
+              type={
+                'album' in item ? 'album' :
+                'artists' in item ? 'track' :
+                'artist'
+              }
+            />
+          )}
         </View>
       </Pressable>
     );
