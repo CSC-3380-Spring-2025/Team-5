@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { db, auth } from '../config/firebase'; // Adjust the path if needed
-import { collection, addDoc, serverTimestamp, doc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDoc, doc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 function generatePostId(): string {
@@ -33,17 +33,30 @@ const PostPopup = ({ visible, onClose }: { visible: boolean; onClose: () => void
       Alert.alert('Not Authenticated', 'Please log in to submit a post.');
       return;
     }
-    await addDoc(collection(db, 'users', user.uid, 'posts'), {
-      postId: generatePostId(),
-      content: caption.trim(),
-      createdAt: serverTimestamp(),
-      userId: user.uid,
-      likes: 0,
-      comments: [],
-    });
 
-    onClose();
+    try {
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const username = userDoc.exists() ? userDoc.data().username || 'Unknown User' : 'Unknown User';
 
+      await addDoc(collection(db, 'posts'), {
+        postID: generatePostId(),
+        content: caption.trim(),
+        createdAt: serverTimestamp(),
+        userID: user.uid,
+        username: username,
+        songTitle: selectedItem.title,
+        songArtist: selectedItem.artist,
+        likes: 0
+      });
+
+      Alert.alert('Success', 'Your post has been created!');
+      setCaption('');
+      setSelectedItem(null);
+      onClose();
+    } catch (error) {
+      console.error('Error creating post:', error);
+      Alert.alert('Error', 'Failed to create post. Please try again.');
+    }
   };
 
   return (

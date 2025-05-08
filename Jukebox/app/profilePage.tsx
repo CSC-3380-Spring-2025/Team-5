@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'space-around', 
     alignItems: 'center', 
-    paddingBottom: scale(40), 
+    paddingBottom: scale(65), 
   },
   linecontainer: {
     position: 'absolute', 
