@@ -30,7 +30,7 @@ export default function ProfilePicture({ visible, onClose, onSave }: Props) {
   const handleSave = () => {
     if (selected !== null) {
       const selectedImage = imageOptions[selected];
-      onSave(selectedImage.name); // ✅ Sends just "pfp2.jpeg"
+      onSave(selectedImage.name);
       onClose();
     }
   };
