@@ -1,4 +1,4 @@
-# [Jukebox] : [Team 5]
+# Jukebox : Team 5
 # Aidan McNamara, Caleb Zeringue, Mason Bourgeois, Darrion Paul, Sergio Zuniga, Behrens Richeson 
 Project Manager: Mason (boug1e)\
 Communications Lead: Sergio (snunoz)\
@@ -32,20 +32,29 @@ Styles Guide(s): [link]
 - Android Studio if simulating on Windows. (Latest Version)
 - XCode if simulating on macOS. (Latest Version)
 - (Optional) An IDE such as VScode.
+
+Through XCode or Android Studio, install a simulation device to run the app.
+
 ### Downloading Dependencies
-Describe where to download the dependencies here. Some will likely require a web download. Provide links here. For IDE extensions, make sure your project works with the free version of them, and detail which IDE(s) these are available in. 
 - Node.js can be downloaded [here](https://nodejs.org/en/download). Make sure to download with npm.
 - Git can be downloaded [here](https://git-scm.com/downloads). Make sure to download the compatible installer for your platform.
 - [Android Studio](https://developer.android.com/studio) for Windows only.
 - [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12/) for macOS only.
-## Commands
-Describe how the commands and process to launch the project on the main branch in such a way that anyone working on the project knows how to check the affects of any code they add.
+- [Visual Studio Code](https://code.visualstudio.com/) can be found here if you want to run it in an IDE.
 
-1. Create a folder to store the project and enter it. Then, in the terminal type:
+## Commands
+To run Jukebox, follow these steps:
+1. Create a folder to store the project and enter it. Open the terminal in that directory and enter:
 ```sh
 git clone https://github.com/CSC-3380-Spring-2025/Team-5.git
 ```
-2. Navigate to the Jukebox Directory, then install all dependencies through Node Package Manager:
+
+2. Navigate to the Jukebox Directory in the terminal via:
+```
+cd Team-5/Jukebox
+```
+
+3. Install all dependencies through Node Package Manager in terminal:
 ```sh
 npm i
 ```
@@ -53,23 +62,6 @@ npm i
 ```sh
 npx expo start
 ```
-4. Once the app is started and you are prompted with a menu, type **a** if on Windows, or **i** if on macOS. If you want to select the specific simulator you want to open, pressing `shift + (i or a)` will open a selection screen where you can choose what simulator want to open.
-   
-It is very common in these sections to see code in peculiar boxes to help them stand out. Check the markdown section of the Project Specifications to see how to add more / customize these.
+4. Make sure to have your simulation device open before launching the app (Android Studio or XCode). Once the app is started and you are prompted with a menu, type **a** if on Windows, or **i** if on macOS to launch the simulator. If you want to select the specific simulator (phone model) you want to open, pressing `shift + (i or a)` will open a selection screen where you can choose which simulator you want to open.
 
-```python
-def code_highlight_example(m: int, m: float, s: str) -> str:
-	return s + str(n*m)
-```
-
-```java
-public static void main(String[] args){
-	System.out.println("Hello, World!");
-}
-```
-
-```c#
-static void Main(){
-	Console.WriteLine("Hello, World!");
-}
-```
+If the app freezes or crashes, in the terminal type `r` to restart the app.
