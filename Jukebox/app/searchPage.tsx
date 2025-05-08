@@ -10,6 +10,12 @@ import { searchUsers } from '@/Services/searchUsers';
 import { router, Stack } from 'expo-router';
 import FavoriteButton from '@/components/FavoriteButton';
 import { User } from '@/context/UserContext';
+import { saveArtistRating } from '@/firebase/saveRating';
+import { saveSongRating, saveAlbumRating } from '@/firebase/saveSongAndAlbumRating';
+import RatingPopup from '@/components/rateComponent';
+
+
+
 
 type SearchCategory = 'Artists' | 'Songs' | 'Albums' | 'Users';
 const placeholderImage: any = require('@/assets/PFP/defaultPFP.jpeg');
@@ -22,6 +28,8 @@ export default function SearchPage() {
   const spotifyArtistService = SpotifyService.getInstance();
   const spotifySongService = SpotifySongService.getInstance();
   const spotifyAlbumService = SpotifyAlbumService.getInstance();
+  const [selectedItem, setSelectedItem] = useState<SpotifyArtist | SpotifySong | SpotifyAlbum | null>(null);
+  const [showRatingPopup, setShowRatingPopup] = useState(false);
 
   const handleSearch = async (query: string) => {
     if (category === 'Artists') {
@@ -76,7 +84,7 @@ export default function SearchPage() {
   };
 
   const handleWeatherPress = async (weather: string, message: string) => {
-    console.log(message); // debugging or logging
+    console.log(message);
   
     const weatherToPlaylist: Record<string, string> = {
       Clear: 'https://open.spotify.com/playlist/37i9dQZF1DX1BzILRveYHb?si=fA2nEPeASNmbLb0N8c-K9g', 
@@ -103,8 +111,39 @@ export default function SearchPage() {
   
 
   const handleItemPress = (item: SpotifyArtist | SpotifySong | SpotifyAlbum | User) => {
-    router.push('/infopage');
+    if (category !== 'Users') {
+      setSelectedItem(item);
+      setShowRatingPopup(true);
+    } else {
+      router.push('/infopage');
+    }
   };
+
+  const handleRatingSubmit = async (rating: number) => {
+    if (!selectedItem || !('id' in selectedItem) || !('name' in selectedItem)) return;
+  
+    try {
+      const { id, name } = selectedItem;
+  
+      if (category === 'Artists') {
+        await saveArtistRating(id, name, rating);
+      } else if (category === 'Songs') {
+        await saveSongRating(id, name, rating);
+      } else if (category === 'Albums') {
+        await saveAlbumRating(id, name, rating);
+      }
+  
+      console.log(`Saved rating: ${rating} for ${name}`);
+    } catch (error) {
+      console.error('Failed to save rating:', error);
+    } finally {
+      setShowRatingPopup(false);
+      setSelectedItem(null);
+    }
+  };
+  
+  
+  
 
   const categories: SearchCategory[] = ['Artists', 'Songs', 'Albums', 'Users'];
 
@@ -181,7 +220,7 @@ export default function SearchPage() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Search" }} />
-      {/*  Weather Display */}
+      {/* Weather Display */}
       <View style={styles.weatherContainer}>
         <WeatherButton onPress={handleWeatherPress} />
       </View>
@@ -213,8 +252,18 @@ export default function SearchPage() {
           }
         />
       )}
+
+      <RatingPopup
+        visible={showRatingPopup}
+        onClose={() => {
+          setShowRatingPopup(false);
+          setSelectedItem(null);
+        }}
+        onSubmit={handleRatingSubmit}
+      />
     </View>
   );
+
 }
 
 const styles = StyleSheet.create({
