@@ -17,8 +17,8 @@ Jukebox is a social media app focused on music interests. On this app, users can
 - A profile to showcase your ratings to other people
   
 ## Platforms Tested on
-- Android (Windows)
-- iOS (macOS)
+- Android (using Android Studio Virtual Device Manager)
+- iOS (using XCode Simulator)
 # Important Links
 Kanban Board: [[link](https://github.com/orgs/CSC-3380-Spring-2025/projects/14)]\
 Designs: [[link](https://www.figma.com/design/8XBJ7Dy6Tnmb4v5FzBzqBX/OO-App-Layout?node-id=0-1&t=8oLFgOeiimzbRWJR-1)]\
