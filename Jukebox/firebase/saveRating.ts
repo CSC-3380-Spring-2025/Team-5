@@ -1,6 +1,6 @@
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
-import { auth, db } from '../config/firebase'; // 👈 relative path to config/firebase.ts
-
+import { auth, db } from '../config/firebase';
+// Saving user rating for an artist in Firebase
 export const saveArtistRating = async (
   artistId: string,
   artistName: string,
@@ -17,7 +17,7 @@ export const saveArtistRating = async (
     rating,
     dateRated: new Date().toISOString(),
   };
-
+// Get ratings for the user
   await updateDoc(userRef, {
     'ratings.artists': arrayUnion(ratingEntry),
   });
