@@ -31,7 +31,7 @@ export default function SearchPage() {
   const spotifyArtistService = SpotifyService.getInstance();
   const spotifySongService = SpotifySongService.getInstance();
   const spotifyAlbumService = SpotifyAlbumService.getInstance();
-  const [selectedItem, setSelectedItem] = useState<SpotifyArtist | SpotifySong | SpotifyAlbum | null>(null);
+  const [selectedItem, setSelectedItem] = useState<SpotifyArtist | SpotifySong | SpotifyAlbum | User | null>(null);
   const [showRatingPopup, setShowRatingPopup] = useState(false);
 
   const handleSearch = async (query: string) => {
@@ -128,7 +128,9 @@ export default function SearchPage() {
     try {
       const { id, name } = selectedItem;
   
-      if (category === 'Artists') {
+      if ('username' in selectedItem) {
+        return;
+      } else if (category === 'Artists') {
         await saveArtistRating(id, name, rating);
       } else if (category === 'Songs') {
         await saveSongRating(id, name, rating);
@@ -152,34 +154,29 @@ export default function SearchPage() {
 
   const renderItem = ({ item }: { item: SpotifyArtist | SpotifySong | SpotifyAlbum | User }) => {
     let imageUrl = null;
-
-  
-
     let title = '';
     let subtitle = '';
 
-
-    if ('images' in item && item.images[0]) {
-      imageUrl = item.images[0].url;
+    if ('images' in item && item.images && item.images.length > 0 && item.images[0]) {
+      imageUrl = { uri: item.images[0].url };
       title = item.name;
       if ('artists' in item) {
         subtitle = item.artists.map((a: { name: string }) => a.name).join(', ');
       }
-    } else if ('album' in item && item.album.images[0]) {
-      imageUrl = item.album.images[0].url;
+    } else if ('album' in item && item.album.images && item.album.images.length > 0 && item.album.images[0]) {
+      imageUrl = { uri: item.album.images[0].url };
       title = item.name;
       subtitle = item.artists.map((a: { name: string }) => a.name).join(', ');
     } else if ('username' in item) {
-      if (item.profilePicture) {
+      if (item.profilePicture && typeof item.profilePicture === 'string') {
         imageUrl = { uri: item.profilePicture };
       } else {
         imageUrl = placeholderImage;
       }
-      title = item.username;
+      title = item.username || 'User';
     }
   
     return (
-
       <Pressable
         onPress={() => handleItemPress(item)}
         style={({ pressed }) => [
