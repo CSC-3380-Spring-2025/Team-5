@@ -65,3 +65,5 @@ npx expo start
 4. Make sure to have your simulation device open before launching the app (Android Studio or XCode). Once the app is started and you are prompted with a menu, type **a** if on Windows, or **i** if on macOS to launch the simulator. If you want to select the specific simulator (phone model) you want to open, pressing `shift + (i or a)` will open a selection screen where you can choose which simulator you want to open.
 
 If the app freezes or crashes, in the terminal type `r` to restart the app.
+
+Make sure to follow the `.env.example` file, and create your own `.env` file in the Jukebox directory.
